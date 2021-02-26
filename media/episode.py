@@ -14,7 +14,7 @@ class Episode:
 
     def __init__(self, season: int = None, episode: int = None,
                  name: str = None, runtime: int = None,
-                 *, json: dict = None):
+                 *, watched: bool = False, json: dict = None):
 
         # Check if the JSON object is given
         if json is not None:
