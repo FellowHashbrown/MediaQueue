@@ -40,6 +40,12 @@ class Season:
         self.__season = season
         self.__episodes = [episode for episode in episodes]
 
+    def __eq__(self, season: 'Season'):
+        if not isinstance(season, Season):
+            return False
+        return (season.get_season() == self.get_season() and
+                {season.get_episodes()} == {self.get_episodes()})
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def get_season(self) -> int:

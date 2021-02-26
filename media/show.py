@@ -58,6 +58,17 @@ class Show(Media):
         self.__seasons = seasons
         self.__episodes = episodes
 
+    def __eq__(self, show: 'Show'):
+        if not isinstance(show, Show):
+            return False
+        return (show.get_name() == self.get_name() and
+                show.get_provider() == self.get_provider() and
+                show.get_person() == self.get_person() and
+                {show.get_seasons()} == {self.get_seasons()} and
+                {show.get_episodes()} == {self.get_episodes()} and
+                show.is_started() is self.is_started() and
+                show.is_finished() is self.is_finished())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def get_seasons(self) -> Union[List[Season], None]:

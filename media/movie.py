@@ -55,6 +55,16 @@ class Movie(Media):
 
         self.__runtime = runtime
 
+    def __eq__(self, movie: 'Movie'):
+        if not isinstance(movie, Movie):
+            return False
+        return (movie.get_name() == self.get_name() and
+                movie.get_runtime() == self.get_runtime() and
+                movie.get_provider() == self.get_provider() and
+                movie.get_person() == self.get_person() and
+                movie.is_started() is self.is_started() and
+                movie.is_finished() is self.is_finished())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def get_runtime(self, in_hours: bool = False) -> int:

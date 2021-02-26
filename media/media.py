@@ -85,6 +85,15 @@ class Media:
         self.__started = started
         self.__finished = finished
 
+    def __eq__(self, media: 'Media'):
+        if not isinstance(media, Media):
+            return False
+        return (media.get_name() == self.get_name() and
+                media.get_provider() == self.get_provider() and
+                media.get_person() == self.get_person() and
+                media.is_started() is self.is_started() and
+                media.is_finished() is self.is_finished())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def set_id(self, id: str):

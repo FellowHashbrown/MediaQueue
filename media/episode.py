@@ -47,6 +47,15 @@ class Episode:
         self.__runtime = runtime
         self.__watched = watched
 
+    def __eq__(self, episode: 'Episode'):
+        if not isinstance(episode, Episode):
+            return False
+        return (episode.get_season() == self.get_season() and
+                episode.get_episode() == self.get_episode() and
+                episode.get_name() == self.get_name() and
+                episode.get_runtime() == self.get_runtime() and
+                episode.is_watched() == self.is_watched())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def get_season(self) -> int:

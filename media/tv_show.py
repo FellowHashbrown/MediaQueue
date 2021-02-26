@@ -34,6 +34,16 @@ class TVShow(Show):
                          started=started, finished=finished,
                          json=json, filename=filename)
 
+    def __eq__(self, tv_show: 'TVShow'):
+        if not isinstance(tv_show, TVShow):
+            return False
+        return (tv_show.get_name() == self.get_name() and
+                set(tv_show.get_seasons()) == set(self.get_seasons()) and
+                tv_show.get_provider() == self.get_provider() and
+                tv_show.get_person() == self.get_person() and
+                tv_show.is_started() == self.is_started() and
+                tv_show.is_finished() == self.is_finished())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def to_json(self) -> dict:

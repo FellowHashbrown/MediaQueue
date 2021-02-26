@@ -35,6 +35,16 @@ class LimitedSeries(Show):
                          started=started, finished=finished,
                          json=json, filename=filename)
 
+    def __eq__(self, limited_series: 'LimitedSeries'):
+        if not isinstance(limited_series, LimitedSeries):
+            return False
+        return (limited_series.get_name() == self.get_name() and
+                {limited_series.get_episodes()} == {self.get_episodes()} and
+                limited_series.get_provider() == self.get_provider() and
+                limited_series.get_person() == self.get_person() and
+                limited_series.is_started() is self.is_started() and
+                limited_series.is_finished() is self.is_finished())
+
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def to_json(self) -> dict:
