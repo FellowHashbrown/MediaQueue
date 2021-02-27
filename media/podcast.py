@@ -1,7 +1,8 @@
 import os
 from json import dump
+from typing import List, Union
 
-from media import TVShow
+from media import Person, StreamingProvider, Season, TVShow
 
 
 class Podcast(TVShow):
@@ -22,6 +23,14 @@ class Podcast(TVShow):
     """
 
     FOLDER = "podcasts"
+
+    def __init__(self, name: str = None, provider: Union[StreamingProvider, str] = None,
+                 person: Union[Person, str] = None, seasons: List[Season] = None,
+                 *, started: bool = False, finished: bool = False,
+                 json: dict = None, filename: str = None):
+        super().__init__(name, provider, person, seasons,
+                         started=started, finished=finished,
+                         json=json, filename=filename)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 

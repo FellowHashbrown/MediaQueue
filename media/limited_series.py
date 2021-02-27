@@ -25,9 +25,8 @@ class LimitedSeries(Show):
 
     FOLDER = "limitedSeries"
 
-    def __init__(self, name: str = None, episodes: List[Episode] = None,
-                 provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None,
+    def __init__(self, name: str = None, provider: Union[StreamingProvider, str] = None,
+                 person: Union[Person, str] = None, episodes: List[Episode] = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
         super().__init__(name, provider, person,
