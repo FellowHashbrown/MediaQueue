@@ -96,10 +96,6 @@ class Media:
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    def set_id(self, id: str):
-        """Sets the ID for this Media object"""
-        self.__id = id
-
     def get_id(self) -> str:
         """Returns the ID of this Media object"""
         return self.__id
@@ -127,6 +123,36 @@ class Media:
     def get_runtime(self, in_hours: bool = False) -> int:
         """Returns the runtime of this media"""
         raise NotImplementedError()
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def set_id(self, id: str):
+        """Sets the ID for this Media object"""
+        self.__id = id
+
+    def set_name(self, name: str):
+        """Sets the name for this Media object"""
+        self.__name = name
+
+    def set_provider(self, provider: StreamingProvider):
+        """Sets the StreamingProvider for this Media object"""
+        self.__provider = provider
+
+    def set_person(self, person: Person):
+        """Sets the Person watching this Media object"""
+        self.__person = person
+
+    def set_started(self, started: bool):
+        """Sets whether or not this Media object has been started"""
+        if started and self.is_finished():
+            self.set_finished(False)
+        self.__started = started
+
+    def set_finished(self, finished: bool):
+        """Sets whether or not this Media object has been finished"""
+        if finished and self.is_started():
+            self.set_started(False)
+        self.__finished = finished
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
