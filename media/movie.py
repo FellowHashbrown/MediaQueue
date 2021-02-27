@@ -85,7 +85,9 @@ class Movie(Media):
             "name": self.get_name(),
             "runtime": self.get_runtime(),
             "provider": self.get_provider().value,
-            "person": self.get_person().value
+            "person": self.get_person().value,
+            "started": self.is_started(),
+            "finished": self.is_finished()
         }
 
     def save(self):
