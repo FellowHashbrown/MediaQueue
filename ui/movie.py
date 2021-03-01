@@ -36,11 +36,14 @@ class MovieView(QtWidgets.QWidget):
         self.save_button.clicked.connect(partial(self.add, True))
         self.add_button = QtWidgets.QPushButton("Add")
         self.add_button.clicked.connect(self.add)
+        self.start_checkbox = QtWidgets.QCheckBox("Started?", self)
+        self.finish_checkbox = QtWidgets.QCheckBox("Finished?", self)
 
         grid = [[name_label, self.name_line_edit, None],
                 [runtime_label, self.runtime_spinner, None],
                 [provider_label, self.provider_dropdown, None],
                 [person_label, self.person_dropdown, None],
+                [self.start_checkbox, self.finish_checkbox],
                 [None, None]]
 
         add_grid_to_layout(grid, layout)
@@ -73,7 +76,9 @@ class MovieView(QtWidgets.QWidget):
                 self.name_line_edit.text(),
                 self.runtime_spinner.value(),
                 self.provider_dropdown.currentText(),
-                self.person_dropdown.currentText()
+                self.person_dropdown.currentText(),
+                started=self.start_checkbox.isChecked(),
+                finished=self.finish_checkbox.isChecked()
             )
             if is_saving:
                 self.movie.set_id(id)
@@ -104,6 +109,8 @@ class MovieView(QtWidgets.QWidget):
             self.runtime_spinner.setValue(movie.get_runtime())
             self.provider_dropdown.setCurrentText(movie.get_provider().value)
             self.person_dropdown.setCurrentText(movie.get_person().value)
+            self.start_checkbox.setChecked(movie.is_started())
+            self.finish_checkbox.setChecked(movie.is_finished())
         else:
             self.window().setWindowTitle("Add Movie")
 
