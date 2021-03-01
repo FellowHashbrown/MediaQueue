@@ -57,4 +57,4 @@ class LimitedSeries(Show):
         if not os.path.exists(LimitedSeries.FOLDER):
             os.mkdir(LimitedSeries.FOLDER)
         with open("./{}/{}.json".format(LimitedSeries.FOLDER, self.get_id()), "w") as jsonfile:
-            dump(self.to_json(), jsonfile)
+            dump(self.to_json(), jsonfile, indent=4)
