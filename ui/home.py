@@ -140,7 +140,7 @@ class Home(QtWidgets.QFrame):
 
         self.media_scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.media_scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.media_scroll_area.setAlignment(QtCore.Qt.AlignTop)
+        self.media_scroll_area.setAlignment(QtCore.Qt.AlignHCenter)
         self.media_scroll_area.setWidget(widget)
 
         return self.media_scroll_area
@@ -251,7 +251,7 @@ class Home(QtWidgets.QFrame):
             4.) Not Started: This will show the Media that has not been started
                 + This also means it will show finished and unfinished Media \n
             5.) Not Finished: This will show the Media that has not been finished
-                + This also means it will show started and unstarted Media \n
+                + This also means it will show started and uninitiated Media \n
             6.) Neither: This will show Media that has not been started nor finished
 
         :param clear: Whether or not to clear the filters
@@ -429,7 +429,7 @@ class Home(QtWidgets.QFrame):
 
                 self.media_widgets[index][3].setText(movie.get_provider().value)
                 self.media_widgets[index][4].setText(movie.get_person().value)
-                self.media_widgets[index][5].setText(movie.get_name())
+                self.media_widgets[index][6].setText(movie.get_name())
 
             # The result of adding a movie
             else:
@@ -446,7 +446,13 @@ class Home(QtWidgets.QFrame):
         if tv_show is not None:
 
             if index is not None:
-                pass
+                self.media[index] = tv_show
+                self.media_widgets[index][0].setChecked(tv_show.is_started())
+                self.media_widgets[index][1].setChecked(tv_show.is_finished())
+
+                self.media_widgets[index][3].setText(tv_show.get_provider().value)
+                self.media_widgets[index][4].setText(tv_show.get_person().value)
+                self.media_widgets[index][6].setText(tv_show.get_name())
             else:
                 self.media.append(tv_show)
                 self.sort_media()
