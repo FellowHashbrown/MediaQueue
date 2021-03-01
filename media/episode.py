@@ -18,7 +18,7 @@ class Episode:
 
         # Check if the JSON object is given
         if json is not None:
-            if {"season", "episode", "name", "runtime"}.issubset(set(json.keys())):
+            if not {"season", "episode", "name", "runtime"}.issubset(set(json.keys())):
                 raise KeyError("Season, Episode, Name, and Runtime must be given")
 
             season = json["season"]
