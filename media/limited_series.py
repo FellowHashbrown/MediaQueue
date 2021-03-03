@@ -34,6 +34,15 @@ class LimitedSeries(Show):
                          started=started, finished=finished,
                          json=json, filename=filename)
 
+    def __str__(self):
+        return "LimitedSeries({}, {}, {}, {}, {}, {}, {})".format(
+            self.get_id(), self.get_name(),
+            self.get_provider().value, self.get_person().value,
+            "Started" if self.is_started() else "Not Started",
+            "Finished" if self.is_finished() else "Not Finished",
+            ", ".join([str(episode) for episode in self.get_episodes()])
+        )
+
     def __eq__(self, limited_series: 'LimitedSeries'):
         if not isinstance(limited_series, LimitedSeries):
             return False

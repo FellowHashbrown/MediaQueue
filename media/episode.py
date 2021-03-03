@@ -47,6 +47,13 @@ class Episode:
         self.__runtime = runtime
         self.__watched = watched
 
+    def __str__(self):
+        return "Episode({}, {}, {}, {}, {})".format(
+            self.get_season(), self.get_episode(),
+            self.get_name(), self.get_runtime(),
+            "Watched" if self.is_watched() else "Unwatched"
+        )
+
     def __eq__(self, episode: 'Episode'):
         if not isinstance(episode, Episode):
             return False
