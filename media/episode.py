@@ -58,6 +58,15 @@ class Episode:
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def set_watched(self, watched: bool):
+        """Sets the value for the watched attribute
+
+        :param watched: Whether or not the Episode has been watched
+        """
+        self.__watched = watched
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
     def get_season(self) -> int:
         """Returns the season number this Episode belongs to"""
         return self.__season
