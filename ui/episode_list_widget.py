@@ -81,7 +81,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
         self.filter_options = ["All Episodes", "Seen Episodes", "Unseen Episodes"]
 
         # Create a list of seasons to add to the filter options
-        #   by going through the episodes and the unique season numebrs
+        #   by going through the episodes and the unique season numbers
         seasons = []
         for episode in media_objects.get_episodes():
             if episode.get_season() not in seasons:
