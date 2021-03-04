@@ -94,7 +94,7 @@ class LimitedSeriesView(QtWidgets.QFrame):
     def setup_finish_buttons_ui(self, parent: QtWidgets.QWidget):
         """Sets up the UI for the finish buttons in the view
 
-        :param parent: The parent widget for all the widgets created in this view
+        :param parent: The parent widget for all the widgets created in this function
         """
 
         widget = QtWidgets.QWidget(parent)
@@ -223,7 +223,9 @@ class LimitedSeriesView(QtWidgets.QFrame):
         self.save_button.setVisible(limited_series is not None)
 
         if limited_series is not None:
-            media_objects.set_episodes([episode for episode in limited_series.get_episodes()])
+            media_objects.set_episodes([
+                episode
+                for episode in limited_series.get_episodes()])
             self.window().setWindowTitle(f"Edit {limited_series.get_name()}")
             self.name_line_edit.setText(limited_series.get_name())
             self.provider_dropdown.setCurrentText(limited_series.get_provider().value)
