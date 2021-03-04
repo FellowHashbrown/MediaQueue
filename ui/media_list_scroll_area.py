@@ -15,12 +15,14 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
     """
 
     def __init__(self, parent: QtWidgets.QWidget = None,
-                 *, edit_media_func: callable = None, remove_media_func: callable = None):
+                 *, edit_media_func: callable = None, remove_media_func: callable = None,
+                 update_stats_func: callable = None):
         super().__init__(parent)
 
         # Save the parameters as attributes
         self.edit_media_func = edit_media_func
         self.remove_media_func = remove_media_func
+        self.update_stats_func = update_stats_func
 
         # Create the widget attributes for inside the scroll area
         self.widget = None
@@ -57,11 +59,13 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
 
             start_checkbox = QtWidgets.QCheckBox(self)
             start_checkbox.clicked.connect(partial(self.update_start, i))
+            start_checkbox.clicked.connect(self.update_stats_func)
             start_checkbox.setChecked(medium.is_started())
             start_checkbox.setToolTip(f"Set the started status of {medium.get_name()}")
 
             finish_checkbox = QtWidgets.QCheckBox(self)
             finish_checkbox.clicked.connect(partial(self.update_finish, i))
+            finish_checkbox.clicked.connect(self.update_stats_func)
             finish_checkbox.setChecked(medium.is_finished())
             finish_checkbox.setToolTip(f"Set the finished status of {medium.get_name()}")
 

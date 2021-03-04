@@ -21,7 +21,8 @@ class MediaListWidget(QtWidgets.QWidget):
         # Create the Scroll Area
         self.scroll_area = MediaListScrollArea(
             self, edit_media_func=edit_media_func,
-            remove_media_func=remove_media_func
+            remove_media_func=remove_media_func,
+            update_stats_func=self.update_stats
         )
         self.scroll_area.setAlignment(QtCore.Qt.AlignHCenter)
 
@@ -79,6 +80,16 @@ class MediaListWidget(QtWidgets.QWidget):
         ]), 7 * 24 * 60)
         days, hours = divmod(days, 24 * 60)
         hours, minutes = divmod(hours, 60)
+        runtime_stats = {
+            "wks": weeks, "days": days,
+            "hours": hours, "mins": minutes
+        }
+        runtime_text = " ".join([
+            f"{runtime_stats[stat]}{stat[:-1]}"
+            if runtime_stats[stat] == 1
+            else f"{runtime_stats[stat]}{stat}"
+            for stat in runtime_stats
+        ])
 
         self.percent_started_label.setText("{}% Started".format(
             round(started_media / total_media * 100, 2)
@@ -86,10 +97,7 @@ class MediaListWidget(QtWidgets.QWidget):
         self.percent_finished_label.setText("{}% Finished".format(
             round(finished_media / total_media * 100, 2)
         ))
-        self.runtime_label.setText("Runtime: {}hr{} {}min{}".format(
-            hours, "s" if hours != 1 else "",
-            minutes, "s" if minutes != 1 else ""
-        ))
+        self.runtime_label.setText(f"Runtime: {runtime_text}")
         self.count_label.setText("Count: {}".format(
             len(media_objects.get_filtered_media())
         ))
