@@ -13,8 +13,8 @@ class PodcastView(QtWidgets.QFrame):
     of Podcast objects in the Media Queue. It is almost identical
     to the TV Show and Limited Series views with the exception of the names set
     for the placeholder text and the window title
-
     """
+
     def __init__(self, parent: QtWidgets.QWidget = None, flags=QtCore.Qt.WindowFlags()):
         super().__init__(parent, flags)
         self.callback = None
@@ -56,7 +56,7 @@ class PodcastView(QtWidgets.QFrame):
     def setup_podcast_ui(self, parent: QtWidgets.QWidget):
         """Sets up the UI for the widgets that allow editing a Podcast
 
-        :param parent: The parentwidget for the widgets created in this function
+        :param parent: The parent widget for the widgets created in this function
         """
 
         widget = QtWidgets.QWidget(parent)
