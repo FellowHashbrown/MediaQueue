@@ -131,7 +131,8 @@ class LimitedSeriesView(QtWidgets.QFrame):
         finished = self.finish_checkbox.isChecked()
         if started and finished:
             self.finish_checkbox.setChecked(False)
-        media_objects.get_limited_series().set_started(started)
+        if media_objects.get_limited_series() is not None:
+            media_objects.get_limited_series().set_started(started)
 
     def update_finish(self):
         """Updates the start and finish checkboxes for the Limited Series.
@@ -145,7 +146,8 @@ class LimitedSeriesView(QtWidgets.QFrame):
         started = self.finish_checkbox.isChecked()
         if finished and started:
             self.start_checkbox.setChecked(False)
-        media_objects.get_limited_series().set_finished(finished)
+        if media_objects.get_limited_series() is not None:
+            media_objects.get_limited_series().set_finished(finished)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -186,7 +188,9 @@ class LimitedSeriesView(QtWidgets.QFrame):
                 self.name_line_edit.text(),
                 self.provider_dropdown.currentText(),
                 self.person_dropdown.currentText(),
-                [episode for episode in media_objects.get_episodes()],
+                [episode
+                 for episode in media_objects.get_episodes()
+                 if episode is not None],
                 started=self.start_checkbox.isChecked(),
                 finished=self.finish_checkbox.isChecked()
             )
@@ -264,7 +268,7 @@ class LimitedSeriesView(QtWidgets.QFrame):
         """
 
         if index is not None:
-            _ = media_objects.episodes.pop(index)
+            media_objects.get_episodes()[index] = None
             media_objects.get_removed_episodes().append(index)
             self.episodes_widget.scroll_area.filter()
 
