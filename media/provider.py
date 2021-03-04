@@ -10,3 +10,4 @@ class StreamingProvider(Enum):
     NETFLIX = "Netflix"
     SPOTIFY = "Spotify"
     VUDU = "Vudu"
+    UNAVAILABLE = "Unavailable"
