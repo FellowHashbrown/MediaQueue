@@ -1,7 +1,6 @@
 from functools import partial
 from PyQt5 import QtWidgets, QtCore
 
-from media import Movie
 from media.util import get_type
 from ui import add_grid_to_layout
 from ui import media_objects

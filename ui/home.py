@@ -1,7 +1,6 @@
 import os
 import sys
 from functools import partial
-from typing import Union
 
 from PyQt5 import QtWidgets, QtCore
 
@@ -434,5 +433,5 @@ class Home(QtWidgets.QFrame):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    home = Home()
+    home = Home({})
     sys.exit(app.exec_())

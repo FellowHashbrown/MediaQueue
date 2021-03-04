@@ -1,8 +1,7 @@
 import sys
-from functools import partial
 from PyQt5 import QtWidgets
 
-from ui import Home, MovieView, TVShowView
+from ui import Home, TVShowView, PodcastView, LimitedSeriesView
 
 
 class MediaQueue(QtWidgets.QApplication):
@@ -25,26 +24,19 @@ class MediaQueue(QtWidgets.QApplication):
         self.widget.currentChanged.connect(self.center)
 
         # Set up the views
-        # episode_view = EpisodeView(widget)
-        # season_view = SeasonView(layout, {"episode": episode_view}, widget)
-        # limited_series_view = LimitedSeriesView(layout, {"episode": episode_view}, widget)
-        # podcast_view = PodcastView(layout, {"season": season_view}, widget))
-        tv_show_view = TVShowView({}, self.widget)
-        movie_view = MovieView(self.widget)
+        limited_series_view = LimitedSeriesView(self.widget)
+        podcast_view = PodcastView(self.widget)
+        tv_show_view = TVShowView(self.widget)
         home_view = Home({
-            "movie": movie_view,
             "tv_show": tv_show_view,
-            # "podcast": podcast_view,
-            # "limited_series_view": limited_series_view
+            "podcast": podcast_view,
+            "limited_series": limited_series_view
         }, self.widget)
 
         self.widget.addWidget(home_view)
-        self.widget.addWidget(movie_view)
         self.widget.addWidget(tv_show_view)
-        # layout.addWidget(podcast_view)
-        # layout.addWidget(limited_series_view)
-        # layout.addWidget(season_view)
-        # layout.addWidget(episode_view)
+        self.widget.addWidget(podcast_view)
+        self.widget.addWidget(limited_series_view)
 
         self.window.setCentralWidget(self.widget)
         self.window.show()
@@ -52,6 +44,10 @@ class MediaQueue(QtWidgets.QApplication):
         sys.exit(self.exec_())
 
     def center(self):
+        """Center the window on the screen"""
+        self.window.setGeometry(0, 0,
+                                2 * MediaQueue.RESOLUTION.width() // 3,
+                                2 * MediaQueue.RESOLUTION.height() // 3)
         qt_rect = self.widget.currentWidget().frameGeometry()
         qt_rect.moveCenter(MediaQueue.CENTER)
         self.window.move(qt_rect.topLeft())

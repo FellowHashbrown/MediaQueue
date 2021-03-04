@@ -1,9 +1,7 @@
-from typing import List
 from PyQt5 import QtWidgets, QtCore
 
-from media import Media, Movie, TVShow, Podcast, LimitedSeries, Person, StreamingProvider
 from ui import MediaListScrollArea
-from ui import add_grid_to_layout, media_objects
+from ui import media_objects
 
 
 class MediaListWidget(QtWidgets.QWidget):

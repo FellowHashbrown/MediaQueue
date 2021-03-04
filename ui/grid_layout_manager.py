@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QGridLayout
-from PyQt5 import QtCore
 
 
 def add_grid_to_layout(grid: list, layout: QGridLayout, start_index: int = 0):
