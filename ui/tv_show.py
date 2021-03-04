@@ -1,38 +1,31 @@
 import sys
 from functools import partial
-from typing import List
 
 from PyQt5 import QtWidgets, QtCore
 
-from media import StreamingProvider, Person, Season, TVShow
-from ui import MessageBox, add_grid_to_layout
+from media import StreamingProvider, Person, Season, Episode, TVShow
+from ui import MessageBox, add_grid_to_layout, EpisodeDialog, EpisodeListWidget
+from ui import media_objects
 
 
 class TVShowView(QtWidgets.QFrame):
-    def __init__(self, views: dict,
-                 parent: QtWidgets.QWidget = None, flags=QtCore.Qt.WindowFlags()):
+    """The TV Show View is meant for the editing or addition
+        of TV Show objects in the Media Queue. It is almost identical
+        to the Podcast and Limited Series views with the exception of the names set
+        for the placeholder text and the window title
+        """
+    def __init__(self, parent: QtWidgets.QWidget = None, flags=QtCore.Qt.WindowFlags()):
         super().__init__(parent, flags)
-        self.views = views
         self.callback = None
         self.index = None
 
-        self.seasons = []  # Keep track of the seasons and the created TV Show
-        self.removed_seasons = []
-        self.tv_show = None
-
-        self.seasons_scroll_area = None
-        self.seasons_widgets = None
-        self.seasons_widget = None
-        self.no_seasons_label = QtWidgets.QLabel("No Seasons", self)
-        self.no_seasons_label.setAlignment(QtCore.Qt.AlignHCenter)
+        self.episodes_widget = None
 
         self.start_checkbox = None
         self.finish_checkbox = None
-        self.add_season_button = None
 
         self.name_line_edit = None
         self.provider_dropdown = None
-        self.person_dropdown = None
         self.person_dropdown = None
 
         self.cancel_button = None
@@ -44,17 +37,26 @@ class TVShowView(QtWidgets.QFrame):
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def setup_ui(self):
+        """Sets up the UI for the TV Show view"""
 
+        # Create the layout and add the child widgets
         layout = QtWidgets.QVBoxLayout()
-
+        self.episodes_widget = EpisodeListWidget(
+            self,
+            edit_episode_func=self.add_edit_episode,
+            remove_episode_func=self.remove_episode)
         layout.addWidget(self.setup_tv_show_ui(self))
-        layout.addWidget(self.setup_seasons_ui())
+        layout.addWidget(self.episodes_widget, 3)
         layout.addWidget(self.setup_finish_buttons_ui(self))
 
         self.setLayout(layout)
         self.show()
 
     def setup_tv_show_ui(self, parent: QtWidgets.QWidget):
+        """Sets up the UI for the widgets that allow editing a TV Show
+
+        :param parent: The parent widget for the widgets created in this function
+        """
 
         widget = QtWidgets.QWidget(parent)
         layout = QtWidgets.QGridLayout()
@@ -67,9 +69,6 @@ class TVShowView(QtWidgets.QFrame):
         divider = QtWidgets.QFrame(widget)
         divider.setFrameShape(QtWidgets.QFrame.HLine)
         divider.setFrameShadow(QtWidgets.QFrame.Sunken)
-        seasons_label = QtWidgets.QLabel("Seasons", widget)
-        seasons_label.setAlignment(QtCore.Qt.AlignHCenter)
-        self.add_season_button = QtWidgets.QPushButton("Add", widget)
 
         self.name_line_edit = QtWidgets.QLineEdit(widget)
         self.name_line_edit.setPlaceholderText("TV Show Name")
@@ -82,35 +81,17 @@ class TVShowView(QtWidgets.QFrame):
                 [provider_label, self.provider_dropdown, None],
                 [person_label, self.person_dropdown, None],
                 [self.start_checkbox, self.finish_checkbox],
-                [divider, None, None],
-                [seasons_label, None, self.add_season_button]]
+                [divider, None, None]]
 
         add_grid_to_layout(grid, layout)
-
         widget.setLayout(layout)
-
         return widget
 
-    def setup_seasons_ui(self):
-
-        self.seasons_scroll_area = QtWidgets.QScrollArea(self)
-        self.seasons_widget = QtWidgets.QWidget()
-        layout = QtWidgets.QGridLayout()
-
-        add_grid_to_layout(self.setup_seasons_widgets(self.seasons_widget), layout)
-        self.no_seasons_label.setParent(self.seasons_widget)
-        layout.addWidget(self.no_seasons_label, 0, 0, 1, 2)
-
-        self.seasons_widget.setLayout(layout)
-
-        self.seasons_scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.seasons_scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.seasons_scroll_area.setAlignment(QtCore.Qt.AlignTop)
-        self.seasons_scroll_area.setWidget(self.seasons_widget)
-
-        return self.seasons_scroll_area
-
     def setup_finish_buttons_ui(self, parent: QtWidgets.QWidget):
+        """Sets up the UI for the finish buttons in the view
+
+        :param parent: The parent widget for all the widgets created in this function
+        """
 
         widget = QtWidgets.QWidget(parent)
         layout = QtWidgets.QGridLayout()
@@ -132,100 +113,113 @@ class TVShowView(QtWidgets.QFrame):
 
         return widget
 
-    def setup_seasons_widgets(self, parent: QtWidgets.QWidget):
-        """Creates the widgets for each Season
+    # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        This will return a list of lists where each sublist contains
-        a widget that matches that of an actual Season object
+    def update_start(self):
+        """Updates the start and finish checkboxes for the TV Show.
+
+        If a user checks the start checkbox, the finish checkbox will be unchecked
         """
 
-        widgets = []
-        for i in range(len(self.seasons)):
-            season = self.seasons[i]
-            season_button = QtWidgets.QPushButton(season.get_season(), parent)
-            season_button.clicked.connect(partial(self.add_edit_season, i))
+        # Add 1 to the index when accessing the widgets
+        #   due to the column headings
+        started = self.start_checkbox.isChecked()
+        finished = self.finish_checkbox.isChecked()
+        if started and finished:
+            self.finish_checkbox.setChecked(False)
+        if media_objects.get_tv_show() is not None:
+            media_objects.get_tv_show().set_started(started)
 
-            runtime_label = QtWidgets.QLabel("{} hour{}".format(
-                season.get_runtime(True),
-                "s" if season.get_runtime(True) != 1 else ""
-            ), parent)
+    def update_finish(self):
+        """Updates the start and finish checkboxes for the TV Show.
 
-            remove_button = QtWidgets.QPushButton("Remove", parent)
-            remove_button.clicked.connect(partial(self.remove_season, i))
+        If a user checks the finish checkbox, the start checkbox will be unchecked.
+        """
 
-            season_widgets = [season_button, runtime_label, remove_button]
-            widgets.append(season_widgets)
-
-        return widgets
-
-    def update_seasons(self):
-        self.seasons_scroll_area.widget().deleteLater()
-        self.seasons_widgets = self.setup_seasons_widgets()
-        self.seasons_scroll_area.setWidget(self.seasons_widgets)
-
-        self.no_seasons_label.setVisible(len(self.seasons) == 0)
+        # Add 1 to the index when accessing the widgets
+        #   due to the column headings
+        finished = self.start_checkbox.isChecked()
+        started = self.finish_checkbox.isChecked()
+        if finished and started:
+            self.start_checkbox.setChecked(False)
+        if media_objects.get_tv_show() is not None:
+            media_objects.get_tv_show().set_finished(finished)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    def callback_season(self, index: int = None, season: Season = None):
-        self.parent().setCurrentWidget(self)
+    def clear_widgets(self):
+        """Clears the widgets for the TV Show and clears the attributes"""
 
-        if season is not None:
-            if index is not None:
-                self.seasons[index] = season
-                self.season_widgets[index][0].setText(f"Season {season.get_season()}")
-            else:
-                self.seasons.append(season)
-                self.update_seasons()
-
-    def remove_season(self, index: int = None):
-        pass
-
-    def add_edit_season(self, index: int = None):
-        season = None
-        if index is not None:
-            season = self.seasons[index]
-        self.views["season"].edit(season, self.callback_season, index)
-        self.parent().setCurrentWidget(self.views["season"])
-
-    def cancel(self):
-        """Resets the values for each widget and returns to the previous widget"""
         self.name_line_edit.setText("")
         self.provider_dropdown.setCurrentIndex(0)
         self.person_dropdown.setCurrentIndex(0)
-        self.seasons = []
-        self.callback()
+        self.episodes_widget.scroll_area.update_ui()
+
+    def cancel(self):
+        """Cancels adding or editing a TV Show and moves back to the previous screen"""
+
+        self.clear_widgets()
+        self.callback(canceled=True)
 
     def add(self, is_saving: bool = False):
         """Saves the current TV Show as an object and loads it into the
         Media Queue app
+
+        If the is_saving parameter is set to true, it will retrieve
+        the ID of the existing TV Show object so a new file is not made
+        with the same data but different ID
+
+        :param is_saving: Whether or not the addition of this TV Show
+            is actually saving an existing one
         """
+
         try:
+
+            # Get a list of Seasons and Episodes in those Seasons
+            seasons = {}
+            for episode in media_objects.get_episodes():
+                if episode is not None:
+                    if episode.get_season() not in seasons:
+                        seasons[episode.get_season()] = []
+                    seasons[episode.get_season()].append(episode)
+
+            # Create a new TV Show object
+            #   getting the ID of the tv show, if editing
             if is_saving:
-                id = self.tv_show.get_id()
-            self.tv_show = TVShow(
+                tv_show = media_objects.get_tv_show()
+                id = tv_show.get_id()
+            tv_show = TVShow(
                 self.name_line_edit.text(),
                 self.provider_dropdown.currentText(),
                 self.person_dropdown.currentText(),
-                self.seasons
+                [
+                    Season(season, seasons[season])
+                    for season in seasons
+                ],
+                started=self.start_checkbox.isChecked(),
+                finished=self.finish_checkbox.isChecked()
             )
             if is_saving:
-                self.tv_show.set_id(id)
-            self.tv_show.save()
-            self.callback(self.index, self.tv_show)
+                tv_show.set_id(id)
+            media_objects.set_tv_show(tv_show)
+
+            # Save the TV Show into a file and go back to the previous screen
+            tv_show.save()
+            self.clear_widgets()
+            self.callback(self.index)
+
         except ValueError:
             MessageBox(
                 "Missing Values",
                 "You must specify the Name, the Streaming Provider and the Person")
 
-    def edit(self, tv_show: TVShow, callback: callable, index: int):
+    def edit(self, callback: callable = None, index: int = None):
         """Sets whether the user is editing or adding a TV Show in this view
 
-        :param tv_show: The TV Show the user is editing, if any
         :param callback: The callback function when the user is done editing
         :param index: The index of the TV Show in the media list
         """
-        self.tv_show = tv_show
+        tv_show = media_objects.get_tv_show()
         self.callback = callback
         self.index = index
 
@@ -233,15 +227,66 @@ class TVShowView(QtWidgets.QFrame):
         self.save_button.setVisible(tv_show is not None)
 
         if tv_show is not None:
-            self.setWindowTitle(f"Edit {tv_show.get_name()}")
+            media_objects.set_episodes([
+                episode
+                for season in tv_show.get_seasons()
+                for episode in season.get_episodes()])
+            self.window().setWindowTitle(f"Edit {tv_show.get_name()}")
             self.name_line_edit.setText(tv_show.get_name())
             self.provider_dropdown.setCurrentText(tv_show.get_provider().value)
             self.person_dropdown.setCurrentText(tv_show.get_person().value)
+            self.start_checkbox.setChecked(tv_show.is_started())
+            self.finish_checkbox.setChecked(tv_show.is_finished())
+            self.episodes_widget.scroll_area.update_ui()
+            self.episodes_widget.update_filter_options()
         else:
             self.window().setWindowTitle("Add TV Show")
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def add_edit_episode(self, index: int = None):
+        """Allow a user to add or edit an Episode
+
+        :param index: The index of an Episode to edit, if any
+        """
+
+        # Ask the Episode Dialog for an Episode input
+        if index is None:
+            media_objects.set_episode()
+        else:
+            media_objects.set_episode(media_objects.get_episodes()[index])
+        episode_dialog = EpisodeDialog(self)
+
+        # If the Episode dialog result was accepted (Save or Ok)
+        #   set the edited Episode or add a new one to the list
+        if episode_dialog.result == QtWidgets.QDialog.Accepted:
+            episode = media_objects.get_episode()
+            if index is not None:
+                media_objects.get_episodes()[index] = episode
+            else:
+                media_objects.get_episodes().append(episode)
+            self.episodes_widget.scroll_area.update_ui()
+            self.episodes_widget.update_filter_options()
+
+    def remove_episode(self, index: int = None):
+        """Allows a user to remove an Episode from the TV Show
+
+        :param index: The index of the Episode to edit, if any
+        """
+
+        if index is not None:
+            media_objects.get_episodes()[index] = None
+            media_objects.get_removed_episodes().append(index)
+            self.episodes_widget.scroll_area.filter()
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    widget = TVShowView({})
+    widget = TVShowView()
+    widget.edit(TVShow("iCarly", "Vudu", "Both", [
+        Season(1, [Episode(1, 1, "iPilot", 23),
+                   Episode(1, 2, "iLike Jake", 23)]),
+        Season(2, [Episode(2, 1, "iSomething", 23),
+                   Episode(2, 2, "iAnother", 23)])
+    ]))
     sys.exit(app.exec_())
