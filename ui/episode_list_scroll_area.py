@@ -51,6 +51,9 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         ]]
         for widget in self.widgets[0]:
             widget.setStyleSheet("font-weight: bold;")
+        if self.hide_season:
+            self.widgets[0][1].hide()
+            self.widgets[0].pop(1)  # Remove the season column label from the widget grid
 
         # Sort the episodes and create the widgets for the Episodes
         media_objects.sort_episodes()
@@ -81,12 +84,15 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
             episode_widgets = [watched_checkbox, season_label,
                                episode_label, runtime_label,
                                episode_button, remove_button]
+            if self.hide_season:
+                episode_widgets[1].hide()
+                episode_widgets.pop(1)  # Remove the season label from the widget grid
             self.widgets.append(episode_widgets)
 
         # Add all the widgets to the layout, set the layout
         #   and filter the widgets
         add_grid_to_layout(self.widgets, layout)
-        layout.addWidget(self.no_episodes_label, 1, 0, 1, 6)
+        layout.addWidget(self.no_episodes_label, 1, 0, 1, 5 if self.hide_season else 6)
 
         self.widget.setLayout(layout)
         self.setWidget(self.widget)
@@ -119,8 +125,4 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         for i in range(len(media_objects.get_episodes())):
             for ew in self.widgets[i + 1]:
                 ew.setVisible(media_objects.get_episodes()[i] in filtered_episodes)
-
-        # Set the visibility of the season column accordingly
-        for widget_list in self.widgets:
-            widget_list[1].setVisible(not self.hide_season)
         self.no_episodes_label.setVisible(len(filtered_episodes) == 0)
