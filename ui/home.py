@@ -33,16 +33,16 @@ class Home(QtWidgets.QFrame):
         media = []
         paths = [Movie.FOLDER, TVShow.FOLDER, Podcast.FOLDER, LimitedSeries.FOLDER]
         for path in paths:
-            if os.path.exists(f"./{path}"):
-                for file in os.listdir(f"./{path}"):
+            if os.path.exists(f"./data/{path}"):
+                for file in os.listdir(f"./data/{path}"):
                     if path == Movie.FOLDER and file.endswith(".json"):
-                        media.append(Movie(filename=f"./{path}/{file}"))
+                        media.append(Movie(filename=f"./data/{path}/{file}"))
                     elif path == TVShow.FOLDER and file.endswith(".json"):
-                        media.append(TVShow(filename=f"./{path}/{file}"))
+                        media.append(TVShow(filename=f"./data/{path}/{file}"))
                     elif path == Podcast.FOLDER and file.endswith(".json"):
-                        media.append(Podcast(filename=f"./{path}/{file}"))
+                        media.append(Podcast(filename=f"./data/{path}/{file}"))
                     elif path == LimitedSeries.FOLDER and file.endswith(".json"):
-                        media.append(LimitedSeries(filename=f"./{path}/{file}"))
+                        media.append(LimitedSeries(filename=f"./data/{path}/{file}"))
         media_objects.set_media(media)
 
         # Setup the MediaListWidget and the attributes for the filter comboboxes
