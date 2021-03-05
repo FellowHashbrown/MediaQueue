@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets
 
 from ui import Home, TVShowView, PodcastView, LimitedSeriesView
+from ui import AppMenuBar
 
 
 class MediaQueue(QtWidgets.QApplication):
@@ -32,6 +33,10 @@ class MediaQueue(QtWidgets.QApplication):
             "podcast": podcast_view,
             "limited_series": limited_series_view
         }, self.widget)
+
+        # Setup the Menu Bar for loading data into the Media Queue
+        self.window.setMenuBar(AppMenuBar(self.widget,
+                                          update_media_func=home_view.media_list_widget.scroll_area.update_ui))
 
         self.widget.addWidget(home_view)
         self.widget.addWidget(tv_show_view)
