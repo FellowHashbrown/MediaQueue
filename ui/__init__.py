@@ -14,4 +14,5 @@ from ui.tv_show import TVShowView
 from ui.podcast import PodcastView
 from ui.movie import MovieDialog
 from ui.home import Home
+from ui.app_menu_bar import AppMenuBar
 from ui.app import MediaQueue
