@@ -1,9 +1,9 @@
 import string
 from datetime import datetime
 from json import dumps
-from typing import Union
+from typing import List, Union
 
-from media import Movie, TVShow, Podcast, LimitedSeries
+from media import Media, Movie, TVShow, Podcast, LimitedSeries
 
 EXPORTS = "exports"
 
@@ -26,7 +26,7 @@ def format_filename(s):
     return filename
 
 
-def __media_to(media: Union[Movie, LimitedSeries, Podcast, TVShow],
+def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
                *, as_csv: bool = False, as_json: bool = False):
     """Exports the specified media into the specified file into the exports folder.
 
@@ -41,16 +41,23 @@ def __media_to(media: Union[Movie, LimitedSeries, Podcast, TVShow],
     file_location = "{}_{}_{}_{}_{}_{}_{}".format(
         now.year, now.month, now.day,
         now.hour, now.minute, now.second,
-        format_filename(media.get_name()))
+        format_filename(media.get_name())
+        if not isinstance(media, List) else "all_media")
     if as_csv:
         with open(f"./exports/{file_location}.csv", "w") as csv_file:
             csv_file.write(media.to_csv())
     if as_json:
+        json_object = []
+        if isinstance(media, List):
+            for m in media:
+                json_object.append(m.to_json())
+        else:
+            json_object = media.to_json()
         with open(f"./exports/{file_location}.json", "w") as json_file:
-            json_file.write(dumps(media.to_json(), indent=4))
+            json_file.write(dumps(json_object, indent=4))
 
 
-def media_to_csv(media: Union[Movie, LimitedSeries, Podcast, TVShow]):
+def media_to_csv(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow]):
     """Exports the specified media into a CSV file
 
     :param media: The Media object to convert into CSV
@@ -58,7 +65,7 @@ def media_to_csv(media: Union[Movie, LimitedSeries, Podcast, TVShow]):
     __media_to(media, as_csv=True)
 
 
-def media_to_json(media: Union[Movie, LimitedSeries, Podcast, TVShow]):
+def media_to_json(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow]):
     """Exports the specified media into a JSON file
 
     :param media: The Media object to convert into JSON
