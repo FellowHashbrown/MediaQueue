@@ -1,3 +1,4 @@
+import os
 import string
 from datetime import datetime
 from json import dumps
@@ -43,9 +44,19 @@ def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
         now.hour, now.minute, now.second,
         format_filename(media.get_name())
         if not isinstance(media, List) else "all_media")
+    if not os.path.exists(EXPORTS):
+        os.mkdir(EXPORTS)
+
     if as_csv:
+        csv_object = ""
+        if isinstance(media, List):
+            for m in media:
+                csv_object += m.to_csv()
+        else:
+            csv_object = media.to_csv()
         with open(f"./exports/{file_location}.csv", "w") as csv_file:
-            csv_file.write(media.to_csv())
+            csv_file.write(csv_object)
+
     if as_json:
         json_object = []
         if isinstance(media, List):
