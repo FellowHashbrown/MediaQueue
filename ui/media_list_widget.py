@@ -89,13 +89,16 @@ class MediaListWidget(QtWidgets.QWidget):
             if runtime_stats[stat] == 1
             else f"{runtime_stats[stat]}{stat}"
             for stat in runtime_stats
+            if runtime_stats[stat] > 0
         ])
 
         self.percent_started_label.setText("{}% Started".format(
             round(started_media / total_media * 100, 2)
+            if total_media != 0 else 0
         ))
         self.percent_finished_label.setText("{}% Finished".format(
             round(finished_media / total_media * 100, 2)
+            if total_media != 0 else 0
         ))
         self.runtime_label.setText(f"Runtime: {runtime_text}")
         self.count_label.setText("Count: {}".format(
