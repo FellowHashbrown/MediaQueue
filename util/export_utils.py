@@ -38,25 +38,29 @@ def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
     :param as_csv: Whether or not to export the Media as a CSV file
     :param as_json: Whether or not to export the Media as a JSON file
     """
+
+    # Create the exports folder if necessary
+    if not os.path.exists(EXPORTS):
+        os.mkdir(EXPORTS)
+
+    # Get the filename
     now = datetime.now()
     file_location = "{}_{}_{}_{}_{}_{}_{}".format(
         now.year, now.month, now.day,
         now.hour, now.minute, now.second,
         format_filename(media.get_name())
         if not isinstance(media, List) else "all_media")
-    if not os.path.exists(EXPORTS):
-        os.mkdir(EXPORTS)
 
+    # Export media as CSV
     if as_csv:
-        csv_object = ""
         if isinstance(media, List):
-            for m in media:
-                csv_object += m.to_csv()
+            csv_object = "\n".join(m.to_csv() for m in media)
         else:
             csv_object = media.to_csv()
         with open(f"./exports/{file_location}.csv", "w") as csv_file:
             csv_file.write(csv_object)
 
+    # Export media as JSON
     if as_json:
         json_object = []
         if isinstance(media, List):
