@@ -73,7 +73,7 @@ class LimitedSeries(Show):
 
     def save(self):
         """Saves this LimitedSeries object into a JSON file"""
-        if not os.path.exists(LimitedSeries.FOLDER):
-            os.mkdir(LimitedSeries.FOLDER)
-        with open("./{}/{}.json".format(LimitedSeries.FOLDER, self.get_id()), "w") as jsonfile:
+        if not os.path.exists(f"./data/{LimitedSeries.FOLDER}"):
+            os.mkdir(f"./data/{LimitedSeries.FOLDER}")
+        with open("./data/{}/{}.json".format(LimitedSeries.FOLDER, self.get_id()), "w") as jsonfile:
             dump(self.to_json(), jsonfile, indent=4)

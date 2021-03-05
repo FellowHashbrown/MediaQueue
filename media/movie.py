@@ -109,7 +109,7 @@ class Movie(Media):
 
     def save(self):
         """Saves this Movie into a JSON file"""
-        if not os.path.exists(Movie.FOLDER):
-            os.mkdir(Movie.FOLDER)
-        with open("./{}/{}.json".format(Movie.FOLDER, self.get_id()), "w") as jsonfile:
+        if not os.path.exists(f"./data/{Movie.FOLDER}"):
+            os.mkdir(f"./data/{Movie.FOLDER}")
+        with open("./data/{}/{}.json".format(Movie.FOLDER, self.get_id()), "w") as jsonfile:
             dump(self.to_json(), jsonfile, indent=4)

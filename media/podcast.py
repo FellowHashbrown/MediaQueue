@@ -49,7 +49,7 @@ class Podcast(TVShow):
 
     def save(self):
         """Saves this Podcast object into a JSON file"""
-        if not os.path.exists(Podcast.FOLDER):
-            os.mkdir(Podcast.FOLDER)
-        with open("./{}/{}.json".format(Podcast.FOLDER, self.get_id()), "w") as jsonfile:
+        if not os.path.exists(f"./data/{Podcast.FOLDER}"):
+            os.mkdir(f"./data/{Podcast.FOLDER}")
+        with open("./data/{}/{}.json".format(Podcast.FOLDER, self.get_id()), "w") as jsonfile:
             dump(self.to_json(), jsonfile, indent=4)
