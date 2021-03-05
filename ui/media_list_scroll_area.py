@@ -78,7 +78,7 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
                 minutes, "s" if minutes != 1 else ""
             ), self)
 
-            media_button = QtWidgets.QPushButton(medium.get_name(), self)
+            media_button = QtWidgets.QPushButton(medium.get_name().replace("&", "&&"), self)
             media_button.clicked.connect(partial(self.edit_media_func, get_type(medium), i))
             media_button.setToolTip(f"Edit {medium.get_name()}")
 

@@ -73,7 +73,7 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
                 "s" if episode.get_runtime() != 1 else ""
             ), self)
 
-            episode_button = QtWidgets.QPushButton(episode.get_name(), self)
+            episode_button = QtWidgets.QPushButton(episode.get_name().replace("&", "&&"), self)
             episode_button.clicked.connect(partial(self.edit_episode_func, i))
             episode_button.setToolTip(f"Edit {episode.get_name()}")
 
