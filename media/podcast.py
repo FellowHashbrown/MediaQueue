@@ -43,6 +43,10 @@ class Podcast(TVShow):
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def to_csv(self) -> str:
+        """Returns the JSON representation of this Podcast"""
+        return super().to_csv().replace("TVShow", "Podcast", 1)
+
     def save(self):
         """Saves this Podcast object into a JSON file"""
         if not os.path.exists(Podcast.FOLDER):

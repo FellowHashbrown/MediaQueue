@@ -54,6 +54,20 @@ class TVShow(Show):
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def to_csv(self) -> str:
+        """Returns the CSV representation of this TVShow object"""
+        show_csv = "\"{}\",{},{},{},{}".format(
+            self.get_name(),
+            self.get_provider().value, self.get_person().value,
+            self.is_started(), self.is_finished()
+        )
+        episodes_csv = "\n".join(
+            episode.to_csv()
+            for season in self.get_seasons()
+            for episode in season.get_episodes()
+        )
+        return f"TVShow\n{show_csv}\n{episodes_csv}"
+
     def to_json(self) -> dict:
         """Returns the JSON representation of this TVShow object"""
         super_json = super().to_json()

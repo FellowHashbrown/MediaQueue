@@ -96,6 +96,12 @@ class Episode:
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def to_csv(self) -> str:
+        """Returns the CSV representation of this Episode"""
+        return "{},{},\"{}\",{},{}".format(
+            self.get_season(), self.get_episode(),
+            self.get_name(), self.get_runtime(), self.is_watched())
+
     def to_json(self) -> dict:
         """Returns the JSON representation of this Episode"""
         return {

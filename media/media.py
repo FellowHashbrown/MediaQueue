@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from .person import Person
 from .provider import StreamingProvider
+from exceptions import InvalidFormatError
 
 
 class Media:
@@ -17,11 +18,12 @@ class Media:
     :keyword started: Whether or not this Media has been started (Defaults to False)
     :keyword finished: Whether or not this Media has been finished (Defaults to False)
     :keyword json: The JSON object to load a Media object from
-    :keyword filename: The JSON file to load a Media object from
+    :keyword filename: The JSON or CSV file to load a Media object from
 
-    :raises FileNotFoundError: When the JSON file cannot be found
+    :raises FileNotFoundError: When the JSON or CSV file cannot be found
     :raises KeyError: When the required parameters are missing from the JSON object
     :raises ValueError: When any of the parameters have invalid values
+    :raises InvalidFormatError: When the file type is not .json or .csv
     """
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -34,10 +36,16 @@ class Media:
 
         media_id = None  # Give the ID some default value
 
-        # Check if a JSON file was given
+        # Check if a JSON or CSV file was given
         if filename is not None:
-            with open(filename, "r") as jsonfile:
-                json = load(jsonfile)
+            if filename.endswith(".json"):
+                with open(filename, "r") as jsonfile:
+                    json = load(jsonfile)
+            elif filename.endswith(".csv"):
+                with open(filename, "r") as csvfile:
+                    pass
+            else:
+                raise InvalidFormatError("File type must be .json or .csv")
 
         # Check if a JSON object was given
         if json is not None:
@@ -155,6 +163,10 @@ class Media:
         self.__finished = finished
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def to_csv(self) -> str:
+        """Returns the CSV representation of this Media object"""
+        raise NotImplementedError()
 
     def to_json(self) -> dict:
         """Returns the JSON representation of this Media object"""

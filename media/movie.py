@@ -87,6 +87,14 @@ class Movie(Media):
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def to_csv(self) -> str:
+        """Returns the CSV representation of this Movie"""
+        return "\"{}\",{},{},{},{},{}".format(
+            self.get_name(), self.get_runtime(),
+            self.get_provider().value, self.get_person().value,
+            self.is_started(), self.is_finished()
+        )
+
     def to_json(self) -> dict:
         """Returns the JSON representation of this Movie"""
         return {
