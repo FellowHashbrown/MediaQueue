@@ -50,7 +50,8 @@ class EpisodeListWidget(QtWidgets.QWidget):
             season = None
             watched = None
             if index >= 3:
-                season = index - 2
+                _, season = self.filter_combobox.currentText().split()
+                season = int(season)
             if index == 1:
                 watched = True
             elif index == 2:
