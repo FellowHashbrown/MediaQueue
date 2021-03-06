@@ -155,6 +155,7 @@ class LimitedSeriesView(QtWidgets.QFrame):
     def clear_widgets(self):
         """Clears the widgets for the Limited Series and clears the attributes"""
 
+        media_objects.set_episodes()
         self.name_line_edit.setText("")
         self.provider_dropdown.setCurrentIndex(0)
         self.person_dropdown.setCurrentIndex(0)
@@ -274,6 +275,18 @@ class LimitedSeriesView(QtWidgets.QFrame):
             media_objects.get_episodes()[index] = None
             media_objects.get_removed_episodes().append(index)
             self.episodes_widget.scroll_area.filter()
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def update_providers(self):
+        """Updates the list of providers in the combobox for providers"""
+        self.provider_dropdown.clear()
+        self.provider_dropdown.addItems(options.get_providers())
+
+    def update_persons(self):
+        """Updates the list of persons in the combobox for persons"""
+        self.person_dropdown.clear()
+        self.person_dropdown.addItems(options.get_persons())
 
 
 if __name__ == "__main__":
