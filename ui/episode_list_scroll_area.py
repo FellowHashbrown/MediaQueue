@@ -47,7 +47,7 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         self.widgets = [[
             QtWidgets.QLabel("Watched?", self), QtWidgets.QLabel("Season", self),
             QtWidgets.QLabel("Episode", self), QtWidgets.QLabel("Runtime", self),
-            QtWidgets.QLabel("Show", self)
+            QtWidgets.QLabel("Name", self)
         ]]
         for widget in self.widgets[0]:
             widget.setStyleSheet("font-weight: bold;")
