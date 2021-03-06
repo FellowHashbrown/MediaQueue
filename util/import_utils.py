@@ -69,11 +69,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
                     seasons[int(s_num)] = []
                 seasons[int(s_num)].append(Episode(
                     int(s_num), int(e_num),
-                    name, int(runtime),
+                    e_name, int(runtime),
                     watched=watched == "True"
                 ))
             seasons = [Season(season, seasons[season]) for season in seasons]
-
             if media_content[0][0] == "Podcast":
                 media_list.append(Podcast(
                     name, provider, person, seasons,
