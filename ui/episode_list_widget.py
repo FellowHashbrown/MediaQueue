@@ -23,6 +23,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
         super().__init__(parent, flags)
         self.edit_episode_func = edit_episode_func
         self.remove_episode_func = remove_episode_func
+        self.hide_season = hide_season
 
         # Create the Scroll Area
         self.scroll_area = EpisodeListScrollArea(
@@ -83,12 +84,15 @@ class EpisodeListWidget(QtWidgets.QWidget):
 
         # Create a list of seasons to add to the filter options
         #   by going through the episodes and the unique season numbers
-        seasons = []
-        for episode in media_objects.get_episodes():
-            if episode.get_season() not in seasons:
-                seasons.append(episode.get_season())
-        for season in sorted(seasons):
-            self.filter_options.append(f"Season {season}")
+        #   Only if the seasons will not be hidden (like in Limited Series)
+        if not self.hide_season:
+
+            seasons = []
+            for episode in media_objects.get_episodes():
+                if episode.get_season() not in seasons:
+                    seasons.append(episode.get_season())
+            for season in sorted(seasons):
+                self.filter_options.append(f"Season {season}")
 
         # Clear the current items and update the filter options
         self.filter_combobox.clear()
