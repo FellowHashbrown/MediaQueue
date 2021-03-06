@@ -1,8 +1,8 @@
 import os
 from json import dump
-from typing import List, Union
+from typing import List
 
-from media import Person, StreamingProvider, Season, Show
+from media import Season, Show
 
 
 class TVShow(Show):
@@ -10,8 +10,8 @@ class TVShow(Show):
 
     :param name: The name of this TVShow
     :param seasons: The Season in this TVShow
-    :param provider: The name of the StreamingProvider this TVShow is located on
-    :param person: The Person that is watching this TVShow
+    :param provider: The name of the streaming provider this TVShow is located on
+    :param person: The person that is watching this TVShow
 
     :keyword started: Whether or not this TVShow has been started (Defaults to False)
     :keyword finished: Whether or not this TVShow has been finished (Defaults to False)
@@ -24,8 +24,8 @@ class TVShow(Show):
 
     FOLDER = "tvShows"
 
-    def __init__(self, name: str = None, provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None, seasons: List[Season] = None,
+    def __init__(self, name: str = None, provider: str = None,
+                 person: str = None, seasons: List[Season] = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
         super().__init__(name, provider, person,
@@ -36,7 +36,7 @@ class TVShow(Show):
     def __str__(self):
         return "TVShow({}, {}, {}, {}, {}, {}, {})".format(
             self.get_id(), self.get_name(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             "Started" if self.is_started() else "Not Started",
             "Finished" if self.is_finished() else "Not Finished",
             ", ".join([str(season) for season in self.get_seasons()])
@@ -58,7 +58,7 @@ class TVShow(Show):
         """Returns the CSV representation of this TVShow object"""
         show_csv = "\"{}\",{},{},{},{}".format(
             self.get_name(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             self.is_started(), self.is_finished()
         )
         episodes_csv = "\n".join(

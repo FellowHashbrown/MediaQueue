@@ -2,7 +2,7 @@ import os
 from json import dump, load
 from typing import Union
 
-from media import Media, StreamingProvider, Person
+from media import Media
 
 
 class Movie(Media):
@@ -10,8 +10,8 @@ class Movie(Media):
 
     :param name: The name of the Movie
     :param runtime: The runtime of this Movie in minutes
-    :param provider: The Streaming Provider where this Movie is located on
-    :param person: The Person that is watching this Movie
+    :param provider: The streaming provider where this Movie is located on
+    :param person: The person that is watching this Movie
 
     :keyword started: Whether or not this Movie has been started (Defaults to False)
     :keyword finished: Whether or not this Movie has been finished (Defaults to False)
@@ -26,8 +26,8 @@ class Movie(Media):
     FOLDER = "movies"
 
     def __init__(self, name: str = None, runtime: int = None,
-                 provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None,
+                 provider: str = None,
+                 person: str = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
         super().__init__(name, provider, person,
@@ -59,7 +59,7 @@ class Movie(Media):
         return "Movie({}, {}, {}, {}, {}, {}, {})".format(
             self.get_id(),
             self.get_name(), self.get_runtime(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             "Started" if self.is_started() else "Not Started",
             "Finished" if self.is_finished() else "Not finished"
         )
@@ -91,7 +91,7 @@ class Movie(Media):
         """Returns the CSV representation of this Movie"""
         return "Movie\n\"{}\",{},{},{},{},{}".format(
             self.get_name(), self.get_runtime(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             self.is_started(), self.is_finished()
         )
 
@@ -101,8 +101,8 @@ class Movie(Media):
             "id": self.get_id(),
             "name": self.get_name(),
             "runtime": self.get_runtime(),
-            "provider": self.get_provider().value,
-            "person": self.get_person().value,
+            "provider": self.get_provider(),
+            "person": self.get_person(),
             "started": self.is_started(),
             "finished": self.is_finished()
         }

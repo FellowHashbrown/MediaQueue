@@ -2,7 +2,7 @@ import os
 from json import dump, load
 from typing import List, Union
 
-from media import Media, Season, Episode, StreamingProvider, Person
+from media import Media, Season, Episode
 
 
 class Show(Media):
@@ -27,8 +27,8 @@ class Show(Media):
     FOLDER = "shows"
 
     def __init__(self, name: str = None,
-                 provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None,
+                 provider: str = None,
+                 person: str = None,
                  *, seasons: List[Season] = None, episodes: List[Episode] = None,
                  started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
@@ -105,8 +105,8 @@ class Show(Media):
         return {
             "id": self.get_id(),
             "name": self.get_name(),
-            "provider": self.get_provider().value,
-            "person": self.get_person().value,
+            "provider": self.get_provider(),
+            "person": self.get_person(),
             "started": self.is_started(),
             "finished": self.is_finished(),
             "seasons": [

@@ -1,9 +1,6 @@
 from json import load
-from typing import Union
 from uuid import uuid4
 
-from .person import Person
-from .provider import StreamingProvider
 from exceptions import InvalidFormatError
 
 
@@ -12,8 +9,8 @@ class Media:
     including Movies, TV Shows, Limited Series, and Podcasts
 
     :param name: The name of this Media
-    :param provider: The name of the StreamingProvider this Media is located on
-    :param person: The Person that is watching this Media
+    :param provider: The name of the streaming provider this Media is located on
+    :param person: The person that is watching this Media
 
     :keyword started: Whether or not this Media has been started (Defaults to False)
     :keyword finished: Whether or not this Media has been finished (Defaults to False)
@@ -29,8 +26,8 @@ class Media:
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def __init__(self, name: str = None,
-                 provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None,
+                 provider: str = None,
+                 person: str = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
 
@@ -75,14 +72,10 @@ class Media:
             raise ValueError("The ID must have a length > 0")
         if len(name) == 0:
             raise ValueError("The name must have a length > 0")
-        if isinstance(provider, str):
-            if len(provider) == 0:
-                raise ValueError("The streaming provider must have a length > 0")
-            provider = StreamingProvider(provider)
-        if isinstance(person, str):
-            if len(person) == 0:
-                raise ValueError("The person's name must have a length > 0")
-            person = Person(person)
+        if len(provider) == 0:
+            raise ValueError("The streaming provider must have a length > 0")
+        if len(person) == 0:
+            raise ValueError("The person's name must have a length > 0")
         if started and finished:
             raise ValueError("This media cannot be started and finished at the same time")
 
@@ -112,12 +105,12 @@ class Media:
         """Returns the name of this Media object"""
         return self.__name
 
-    def get_provider(self) -> StreamingProvider:
-        """Returns the StreamingProvider where this Media object is located"""
+    def get_provider(self) -> str:
+        """Returns the streaming provider where this Media object is located"""
         return self.__provider
 
-    def get_person(self) -> Person:
-        """Returns the Person who is watching this Media"""
+    def get_person(self) -> str:
+        """Returns the person who is watching this Media"""
         return self.__person
 
     def is_started(self) -> bool:
@@ -142,12 +135,12 @@ class Media:
         """Sets the name for this Media object"""
         self.__name = name
 
-    def set_provider(self, provider: StreamingProvider):
-        """Sets the StreamingProvider for this Media object"""
+    def set_provider(self, provider: str):
+        """Sets the streaming provider for this Media object"""
         self.__provider = provider
 
-    def set_person(self, person: Person):
-        """Sets the Person watching this Media object"""
+    def set_person(self, person: str):
+        """Sets the person watching this Media object"""
         self.__person = person
 
     def set_started(self, started: bool):

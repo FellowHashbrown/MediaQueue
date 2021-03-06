@@ -1,8 +1,8 @@
 import os
 from json import dump
-from typing import List, Union
+from typing import List
 
-from media import Person, StreamingProvider, Episode, Show
+from media import Episode, Show
 
 
 class LimitedSeries(Show):
@@ -11,8 +11,8 @@ class LimitedSeries(Show):
 
     :param name: The name of this LimitedSeries
     :param episodes: A list of Episodes in this LimitedSeries
-    :param provider: The name of the StreamingProvider this LimitedSeries is located on
-    :param person: The Person that is watching this LimitedSeries
+    :param provider: The name of the streaming provider this LimitedSeries is located on
+    :param person: The person that is watching this LimitedSeries
 
     :keyword started: Whether or not this LimitedSeries has been started (Defaults to False)
     :keyword finished: Whether or not this LimitedSeries has been finished (Defaults to False)
@@ -25,8 +25,8 @@ class LimitedSeries(Show):
 
     FOLDER = "limitedSeries"
 
-    def __init__(self, name: str = None, provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None, episodes: List[Episode] = None,
+    def __init__(self, name: str = None, provider: str = None,
+                 person: str = None, episodes: List[Episode] = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
         super().__init__(name, provider, person,
@@ -37,7 +37,7 @@ class LimitedSeries(Show):
     def __str__(self):
         return "LimitedSeries({}, {}, {}, {}, {}, {}, {})".format(
             self.get_id(), self.get_name(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             "Started" if self.is_started() else "Not Started",
             "Finished" if self.is_finished() else "Not Finished",
             ", ".join([str(episode) for episode in self.get_episodes()])
@@ -58,8 +58,8 @@ class LimitedSeries(Show):
     def to_csv(self) -> str:
         """Returns the CSV representation of this LimitedSeries object"""
         show_csv = "\"{}\",{},{},{},{}".format(
-            self.get_name(), self.get_provider().value,
-            self.get_person().value,
+            self.get_name(), self.get_provider(),
+            self.get_person(),
             self.is_started(), self.is_finished()
         )
         episodes_csv = "\n".join(episode.to_csv() for episode in self.get_episodes())

@@ -1,8 +1,8 @@
 import os
 from json import dump
-from typing import List, Union
+from typing import List
 
-from media import Person, StreamingProvider, Season, TVShow
+from media import Season, TVShow
 
 
 class Podcast(TVShow):
@@ -10,8 +10,8 @@ class Podcast(TVShow):
 
     :param name: The name of this Podcast
     :param seasons: The Season in this Podcast
-    :param provider: The name of the StreamingProvider this Podcast is located on
-    :param person: The Person that is watching this Podcast
+    :param provider: The name of the streaming provider this Podcast is located on
+    :param person: The person that is watching this Podcast
 
     :keyword started: Whether or not this Podcast has been started (Defaults to False)
     :keyword finished: Whether or not this Podcast has been finished (Defaults to False)
@@ -24,8 +24,8 @@ class Podcast(TVShow):
 
     FOLDER = "podcasts"
 
-    def __init__(self, name: str = None, provider: Union[StreamingProvider, str] = None,
-                 person: Union[Person, str] = None, seasons: List[Season] = None,
+    def __init__(self, name: str = None, provider: str = None,
+                 person: str = None, seasons: List[Season] = None,
                  *, started: bool = False, finished: bool = False,
                  json: dict = None, filename: str = None):
         super().__init__(name, provider, person, seasons,
@@ -35,7 +35,7 @@ class Podcast(TVShow):
     def __str__(self):
         return "Podcast({}, {}, {}, {}, {}, {}, {})".format(
             self.get_id(), self.get_name(),
-            self.get_provider().value, self.get_person().value,
+            self.get_provider(), self.get_person(),
             "Started" if self.is_started() else "Not Started",
             "Finished" if self.is_finished() else "Not Finished",
             ", ".join([str(season) for season in self.get_seasons()])
