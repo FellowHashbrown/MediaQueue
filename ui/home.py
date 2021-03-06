@@ -250,7 +250,7 @@ class Home(QtWidgets.QFrame):
             self.filter_media()
 
             media = media_objects.get_media()[index]
-            os.remove(f"./{media.FOLDER}/{media.get_id()}.json")
+            os.remove(f"./data/{media.FOLDER}/{media.get_id()}.json")
 
     def callback_tv_show(self, index: int = None, canceled: bool = False):
         """The callback function when a user is finished editing a TV Show
@@ -277,8 +277,8 @@ class Home(QtWidgets.QFrame):
                 self.media_list_widget.scroll_area.widgets[index + 1][0].setChecked(tv_show.is_started())
                 self.media_list_widget.scroll_area.widgets[index + 1][1].setChecked(tv_show.is_finished())
 
-                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(tv_show.get_provider().value)
-                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(tv_show.get_person().value)
+                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(tv_show.get_provider())
+                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(tv_show.get_person())
                 self.media_list_widget.scroll_area.widgets[index + 1][5].setText("{}hr{} {}min{}".format(
                     hours, "s" if hours != 1 else "",
                     minutes, "s" if minutes != 1 else ""
@@ -321,8 +321,8 @@ class Home(QtWidgets.QFrame):
                 self.media_list_widget.scroll_area.widgets[index + 1][0].setChecked(podcast.is_started())
                 self.media_list_widget.scroll_area.widgets[index + 1][1].setChecked(podcast.is_finished())
 
-                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(podcast.get_provider().value)
-                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(podcast.get_person().value)
+                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(podcast.get_provider())
+                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(podcast.get_person())
                 self.media_list_widget.scroll_area.widgets[index + 1][5].setText("{}hr{} {}min{}".format(
                     hours, "s" if hours != 1 else "",
                     minutes, "s" if minutes != 1 else ""
@@ -341,6 +341,11 @@ class Home(QtWidgets.QFrame):
             self.filter_media()
 
     def callback_limited_series(self, index: int = None, canceled: bool = False):
+        """The callback function when a user is finished editing a LimitedSeries
+
+        :param index: The index of the LimitedSeries to edit, if any.
+        :param canceled: Whether or not the editing of a LimitedSeries was canceled
+        """
 
         self.parent().setCurrentWidget(self)
         self.window().setWindowTitle("Media Queue")
@@ -360,8 +365,8 @@ class Home(QtWidgets.QFrame):
                 self.media_list_widget.scroll_area.widgets[index + 1][0].setChecked(limited_series.is_started())
                 self.media_list_widget.scroll_area.widgets[index + 1][1].setChecked(limited_series.is_finished())
 
-                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(limited_series.get_provider().value)
-                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(limited_series.get_person().value)
+                self.media_list_widget.scroll_area.widgets[index + 1][3].setText(limited_series.get_provider())
+                self.media_list_widget.scroll_area.widgets[index + 1][4].setText(limited_series.get_person())
                 self.media_list_widget.scroll_area.widgets[index + 1][5].setText("{}hr{} {}min{}".format(
                     hours, "s" if hours != 1 else "",
                     minutes, "s" if minutes != 1 else ""
@@ -430,6 +435,18 @@ class Home(QtWidgets.QFrame):
         if media_type != "Movie":
             self.views[view_id].edit(callback_func, index)
             self.parent().setCurrentWidget(self.views[view_id])
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def update_providers_filters(self):
+        """Updates the list of providers in the combobox for providers filters"""
+        self.filter_provider_combobox.clear()
+        self.filter_provider_combobox.addItems(["All"] + [provider for provider in options.get_providers()])
+
+    def update_persons_filters(self):
+        """Updates the list of persons in the combobox for persons filters"""
+        self.filter_person_combobox.clear()
+        self.filter_person_combobox.addItems(["All"] + [person for person in options.get_persons()])
 
 
 if __name__ == "__main__":
