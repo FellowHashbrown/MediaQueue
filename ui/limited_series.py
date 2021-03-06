@@ -3,9 +3,10 @@ from functools import partial
 
 from PyQt5 import QtWidgets, QtCore
 
-from media import StreamingProvider, Person, LimitedSeries
+from media import LimitedSeries
 from ui import MessageBox, add_grid_to_layout, EpisodeDialog, EpisodeListWidget
 from ui import media_objects
+from util import options
 
 
 class LimitedSeriesView(QtWidgets.QFrame):
@@ -77,9 +78,9 @@ class LimitedSeriesView(QtWidgets.QFrame):
         self.name_line_edit = QtWidgets.QLineEdit(widget)
         self.name_line_edit.setPlaceholderText("Limited Series Name")
         self.provider_dropdown = QtWidgets.QComboBox(widget)
-        self.provider_dropdown.addItems([provider.value for provider in StreamingProvider])
+        self.provider_dropdown.addItems([provider for provider in options.get_providers()])
         self.person_dropdown = QtWidgets.QComboBox(widget)
-        self.person_dropdown.addItems([person.value for person in Person])
+        self.person_dropdown.addItems([person for person in options.get_persons()])
 
         grid = [[name_label, self.name_line_edit, None],
                 [provider_label, self.provider_dropdown, None],
@@ -228,8 +229,8 @@ class LimitedSeriesView(QtWidgets.QFrame):
                 for episode in limited_series.get_episodes()])
             self.window().setWindowTitle(f"Edit {limited_series.get_name()}")
             self.name_line_edit.setText(limited_series.get_name())
-            self.provider_dropdown.setCurrentText(limited_series.get_provider().value)
-            self.person_dropdown.setCurrentText(limited_series.get_person().value)
+            self.provider_dropdown.setCurrentText(limited_series.get_provider())
+            self.person_dropdown.setCurrentText(limited_series.get_person())
             self.start_checkbox.setChecked(limited_series.is_started())
             self.finish_checkbox.setChecked(limited_series.is_finished())
             self.episodes_widget.scroll_area.update_ui()

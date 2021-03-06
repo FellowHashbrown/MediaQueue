@@ -1,7 +1,7 @@
 from functools import cmp_to_key
 from typing import List
 
-from media import Media, Episode, Movie, TVShow, Podcast, LimitedSeries, StreamingProvider, Person
+from media import Media, Episode, Movie, TVShow, Podcast, LimitedSeries
 from media.util import get_type
 
 
@@ -198,8 +198,8 @@ class MediaObjects:
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def set_media_filters(self, *, started: bool = None, finished: bool = None,
-                          media_type: Media = None, provider: StreamingProvider = None,
-                          person: Person = None, search: str = None):
+                          media_type: Media = None, provider: str = None,
+                          person: str = None, search: str = None):
         """Sets the filters for the Media on the Home screen
 
         :keyword started: The started filter to use. (Defaults to None)
@@ -258,10 +258,10 @@ class MediaObjects:
             if get_type(a) == get_type(b):
 
                 # Providers are the same, move to Person
-                if a.get_provider().value == b.get_provider().value:
+                if a.get_provider() == b.get_provider():
 
                     # Persons are the same, move to name
-                    if a.get_person().value == b.get_person().value:
+                    if a.get_person() == b.get_person():
 
                         if a.get_name() == b.get_name():
                             return 0
@@ -270,12 +270,12 @@ class MediaObjects:
                         return 1
 
                     # Persons are different
-                    elif a.get_person().value < b.get_person().value:
+                    elif a.get_person() < b.get_person():
                         return -1
                     return 1
 
                 # Providers are different
-                elif a.get_provider().value < b.get_provider().value:
+                elif a.get_provider() < b.get_provider():
                     return -1
                 return 1
 

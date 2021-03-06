@@ -3,9 +3,10 @@ from functools import partial
 
 from PyQt5 import QtWidgets, QtCore
 
-from media import StreamingProvider, Person, Season, Episode, Podcast
+from media import Season, Episode, Podcast
 from ui import MessageBox, add_grid_to_layout, EpisodeDialog, EpisodeListWidget
 from ui import media_objects
+from util import options
 
 
 class PodcastView(QtWidgets.QFrame):
@@ -74,9 +75,9 @@ class PodcastView(QtWidgets.QFrame):
         self.name_line_edit = QtWidgets.QLineEdit(widget)
         self.name_line_edit.setPlaceholderText("Podcast Name")
         self.provider_dropdown = QtWidgets.QComboBox(widget)
-        self.provider_dropdown.addItems([provider.value for provider in StreamingProvider])
+        self.provider_dropdown.addItems([provider for provider in options.get_providers()])
         self.person_dropdown = QtWidgets.QComboBox(widget)
-        self.person_dropdown.addItems([person.value for person in Person])
+        self.person_dropdown.addItems([person for person in options.get_persons()])
 
         grid = [[name_label, self.name_line_edit, None],
                 [provider_label, self.provider_dropdown, None],
@@ -233,8 +234,8 @@ class PodcastView(QtWidgets.QFrame):
                 for episode in season.get_episodes()])
             self.window().setWindowTitle(f"Edit {podcast.get_name()}")
             self.name_line_edit.setText(podcast.get_name())
-            self.provider_dropdown.setCurrentText(podcast.get_provider().value)
-            self.person_dropdown.setCurrentText(podcast.get_person().value)
+            self.provider_dropdown.setCurrentText(podcast.get_provider())
+            self.person_dropdown.setCurrentText(podcast.get_person())
             self.start_checkbox.setChecked(podcast.is_started())
             self.finish_checkbox.setChecked(podcast.is_finished())
             self.episodes_widget.scroll_area.update_ui()

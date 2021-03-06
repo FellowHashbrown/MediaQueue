@@ -4,9 +4,10 @@ from functools import partial
 
 from PyQt5 import QtWidgets, QtCore
 
-from media import Person, StreamingProvider, Movie, TVShow, Podcast, LimitedSeries
+from media import Movie, TVShow, Podcast, LimitedSeries
 from media.util import get_type
 from ui import MovieDialog, MediaListWidget, add_grid_to_layout, media_objects
+from util import options
 
 
 class Home(QtWidgets.QFrame):
@@ -100,11 +101,11 @@ class Home(QtWidgets.QFrame):
         self.filter_type_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
 
         self.filter_provider_combobox = QtWidgets.QComboBox(widget)
-        self.filter_provider_combobox.addItems(["All"] + [provider.value for provider in StreamingProvider])
+        self.filter_provider_combobox.addItems(["All"] + [provider for provider in options.get_providers()])
         self.filter_provider_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
 
         self.filter_person_combobox = QtWidgets.QComboBox(widget)
-        self.filter_person_combobox.addItems(["All"] + [person.value for person in Person])
+        self.filter_person_combobox.addItems(["All"] + [person for person in options.get_persons()])
         self.filter_person_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
 
         self.clear_filter_button = QtWidgets.QPushButton("Clear Filter", widget)
@@ -216,12 +217,12 @@ class Home(QtWidgets.QFrame):
             # Get the filtering of the Streaming Provider attribute
             filter_provider = (self.filter_provider_combobox.currentText()
                                if self.filter_provider_combobox is not None else "All")
-            filter_provider = None if filter_provider == "All" else StreamingProvider(filter_provider)
+            filter_provider = None if filter_provider == "All" else filter_provider
 
             # Get the filtering of the Person attribute
             filter_person = (self.filter_person_combobox.currentText()
                              if self.filter_person_combobox is not None else "All")
-            filter_person = None if filter_person == "All" else Person(filter_person)
+            filter_person = None if filter_person == "All" else filter_person
 
             # Get the filtering from the search bar
             filter_search = self.search_line_edit.text().lower()

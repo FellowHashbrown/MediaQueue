@@ -2,7 +2,6 @@ from csv import reader
 from io import TextIOWrapper
 from typing import List, Union
 
-from media import StreamingProvider, Person
 from media import Movie, LimitedSeries, Podcast, TVShow, Season, Episode
 
 
@@ -42,7 +41,7 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
             name, runtime, provider, person, started, finished = media_content[1]
             media_list.append(Movie(
                 name, int(runtime),
-                StreamingProvider(provider), Person(person),
+                provider, person,
                 started=started == "True", finished=finished == "True"
             ))
 
@@ -57,7 +56,7 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
                     watched=watched == "True"
                 ))
             media_list.append(LimitedSeries(
-                name, StreamingProvider(provider), Person(person), episodes,
+                name, provider, person, episodes,
                 started=started == "True", finished=finished == "True"
             ))
 
@@ -77,12 +76,12 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
 
             if media_content[0][0] == "Podcast":
                 media_list.append(Podcast(
-                    name, StreamingProvider(provider), Person(person), seasons,
+                    name, provider, person, seasons,
                     started=started == "True", finished=finished == "True"
                 ))
             else:
                 media_list.append(TVShow(
-                    name, StreamingProvider(provider), Person(person), seasons,
+                    name, provider, person, seasons,
                     started=started == "True", finished=finished == "True"
                 ))
     return media_list

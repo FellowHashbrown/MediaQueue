@@ -71,8 +71,8 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
 
             hours, minutes = divmod(medium.get_runtime(), 60)
             type_label = QtWidgets.QLabel(get_type(medium), self)
-            provider_label = QtWidgets.QLabel(medium.get_provider().value, self)
-            person_label = QtWidgets.QLabel(medium.get_person().value, self)
+            provider_label = QtWidgets.QLabel(medium.get_provider(), self)
+            person_label = QtWidgets.QLabel(medium.get_person(), self)
             runtime_label = QtWidgets.QLabel("{}hr{} {}min{}".format(
                 hours, "s" if hours != 1 else "",
                 minutes, "s" if minutes != 1 else ""

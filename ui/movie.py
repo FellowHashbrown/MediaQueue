@@ -2,8 +2,9 @@ import sys
 from functools import partial
 from PyQt5 import QtWidgets, QtCore
 
-from media import Movie, StreamingProvider, Person
+from media import Movie
 from ui import MessageBox, add_grid_to_layout, media_objects
+from util import options
 
 
 class MovieDialog(QtWidgets.QDialog):
@@ -79,11 +80,11 @@ class MovieDialog(QtWidgets.QDialog):
         self.minutes_spinner.setToolTip("The minutes portion of the runtime of the Movie")
 
         self.provider_dropdown = QtWidgets.QComboBox(widget)
-        self.provider_dropdown.addItems([provider.value for provider in StreamingProvider])
+        self.provider_dropdown.addItems([provider for provider in options.get_providers()])
         self.provider_dropdown.setToolTip("The Streaming Provider for the Movie")
 
         self.person_dropdown = QtWidgets.QComboBox(widget)
-        self.person_dropdown.addItems([person.value for person in Person])
+        self.person_dropdown.addItems([person for person in options.get_persons()])
         self.person_dropdown.setToolTip("The Person watching the Movie")
 
         self.start_checkbox = QtWidgets.QCheckBox("Started?", widget)
@@ -100,8 +101,8 @@ class MovieDialog(QtWidgets.QDialog):
             self.name_line_edit.setText(movie.get_name())
             self.hours_spinner.setValue(hours)
             self.minutes_spinner.setValue(minutes)
-            self.provider_dropdown.setCurrentText(movie.get_provider().value)
-            self.person_dropdown.setCurrentText(movie.get_person().value)
+            self.provider_dropdown.setCurrentText(movie.get_provider())
+            self.person_dropdown.setCurrentText(movie.get_person())
             self.start_checkbox.setChecked(movie.is_started())
             self.finish_checkbox.setChecked(movie.is_finished())
 
