@@ -3,6 +3,7 @@ from functools import partial
 from PyQt5 import QtWidgets
 
 from ui import media_objects, MessageBox
+from ui import ProviderDialog, PersonDialog
 from util import csv_to_media, media_to_json, media_to_csv
 
 
@@ -16,20 +17,27 @@ class AppMenuBar(QtWidgets.QMenuBar):
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def __init__(self, parent: QtWidgets.QWidget = None,
-                 *, update_media_func: callable = None):
+                 *, update_media_func: callable = None,
+                 update_providers_func: callable = None,
+                 update_persons_func: callable = None):
         super().__init__(parent)
         self.update_media_func = update_media_func
+        self.update_providers_func = update_providers_func
+        self.update_persons_func = update_persons_func
 
-        file_menu = QtWidgets.QMenu("&File", self)
-        file_menu.addAction("Import Media", self.import_media, "Ctrl+O")
-        file_menu.addAction("Export Media as JSON", partial(self.export_media, "json"), "Ctrl+E")
-        file_menu.addAction("Export Media as CSV", partial(self.export_media, "csv"), "Ctrl+Alt+E")
+        file_menu = self.addMenu("File")
+        file_menu.addAction(" Import Media", self.import_media, "Ctrl+O")
+        file_menu.addAction(" Export Media as JSON", partial(self.export_media, "json"), "Ctrl+E")
+        file_menu.addAction(" Export Media as CSV", partial(self.export_media, "csv"), "Ctrl+Alt+E")
 
-        help_menu = QtWidgets.QMenu("&Help", self)
-        help_menu.addAction("Credits", lambda: print("credits!"))
+        options_menu = self.addMenu("Options")
+        options_menu.addAction(" Configure Streaming Providers", self.configure_providers, "Ctrl+1")
+        options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
 
-        self.addMenu(file_menu)
-        self.addMenu(help_menu)
+        help_menu = self.addMenu("Help")
+        help_menu.addAction(" Report Bug", lambda: print("report bug!"))
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
 
     def import_media(self):
         """Asks the user to select a file to import.
@@ -39,12 +47,11 @@ class AppMenuBar(QtWidgets.QMenuBar):
             filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                 None, "Select Media", ".",
                 "CSV Files(*.csv);;JSON Files(*.json)")
-            media = [
-                csv_to_media(filename)
-                for filename in filenames
-            ]
-            for m in media:
-                m.save()
+            media = []
+            for filename in filenames:
+                for media_obj in csv_to_media(filename):
+                    media.append(media_obj)
+                    media_obj.save()
             media_objects.get_media().extend(media)
             self.update_media_func()
             MessageBox("Import Success",
@@ -72,3 +79,13 @@ class AppMenuBar(QtWidgets.QMenuBar):
             e = str(e)
             MessageBox("Export Failure",
                        f"The export failed because: \"{e}\"")
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def configure_providers(self):
+        """Allows a user to configure the Streaming Providers in the application"""
+        ProviderDialog(self, update_func=self.update_providers_func).exec_()
+
+    def configure_persons(self):
+        """Allows a user to configure the Persons in the application"""
+        PersonDialog(self, update_func=self.update_persons_func).exec_()
