@@ -36,7 +36,7 @@ class MediaQueue(QtWidgets.QApplication):
 
         # Setup the Menu Bar for loading data into the Media Queue
         self.window.setMenuBar(AppMenuBar(self.widget,
-                                          update_media_func=self.home_view.media_list_widget.scroll_area.update_ui,
+                                          update_media_func=self.update_media,
                                           update_providers_func=self.update_providers,
                                           update_persons_func=self.update_persons))
 
@@ -60,6 +60,11 @@ class MediaQueue(QtWidgets.QApplication):
         self.window.move(qt_rect.topLeft())
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def update_media(self):
+        """Updates the stats about the media along with the Scroll Area widget"""
+        self.home_view.media_list_widget.scroll_area.update_ui()
+        self.home_view.media_list_widget.update_stats()
 
     def update_providers(self):
         """Updates any dropdowns that contain the list of providers"""
