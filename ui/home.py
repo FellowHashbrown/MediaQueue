@@ -418,7 +418,7 @@ class Home(QtWidgets.QFrame):
                 else:
                     media_objects.get_media().append(movie)
                 self.media_list_widget.scroll_area.update_ui()
-                self.media_list_widget.update()
+                self.filter_media()
 
         # The Limited Series, Podcast, and TV Shows are other views which is
         #   why it's changed
