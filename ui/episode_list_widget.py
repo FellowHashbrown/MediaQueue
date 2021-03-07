@@ -68,7 +68,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
         self.filter_combobox.currentIndexChanged.connect(filter_function)
         self.update_filter_options()
 
-        self.add_episode_button = QtWidgets.QPushButton("Add", self)
+        self.add_episode_button = QtWidgets.QPushButton("Add Episode", self)
         self.add_episode_button.clicked.connect(partial(self.edit_episode_func, None))
 
         layout.addWidget(self.filter_combobox, 0, 0, 1, 2)
