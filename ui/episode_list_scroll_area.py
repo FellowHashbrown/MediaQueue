@@ -51,6 +51,8 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         ]]
         for widget in self.widgets[0]:
             widget.setStyleSheet("font-weight: bold;")
+            if widget.text() == "Name":
+                widget.setAlignment(QtCore.Qt.AlignHCenter)
         if self.hide_season:
             self.widgets[0][1].hide()
             self.widgets[0].pop(1)  # Remove the season column label from the widget grid
