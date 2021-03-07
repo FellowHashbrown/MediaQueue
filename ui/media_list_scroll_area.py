@@ -50,6 +50,10 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
             QtWidgets.QLabel("Person", self), QtWidgets.QLabel("Runtime", self),
             QtWidgets.QLabel("Name", self)
         ]]
+        for widget in self.widgets[0]:
+            widget.setStyleSheet("font-weight: bold;")
+            if widget.text() == "Name":
+                widget.setAlignment(QtCore.Qt.AlignHCenter)
 
         # Sort the media and create the widgets
         media_objects.sort_media()
