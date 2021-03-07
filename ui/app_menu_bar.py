@@ -41,21 +41,22 @@ class AppMenuBar(QtWidgets.QMenuBar):
 
     def import_media(self):
         """Asks the user to select a file to import.
-        The user will only be able to select either .json or .csv files
+        The user will only be able to select .csv files
         """
         try:
             filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                 None, "Select Media", ".",
-                "CSV Files(*.csv);;JSON Files(*.json)")
-            media = []
-            for filename in filenames:
-                for media_obj in csv_to_media(filename):
-                    media.append(media_obj)
-                    media_obj.save()
-            media_objects.get_media().extend(media)
-            self.update_media_func()
-            MessageBox("Import Success",
-                       "Successfully imported media from the selected file(s)")
+                "CSV Files(*.csv)")
+            if len(filenames) > 0:
+                media = []
+                for filename in filenames:
+                    for media_obj in csv_to_media(filename):
+                        media.append(media_obj)
+                        media_obj.save()
+                media_objects.get_media().extend(media)
+                self.update_media_func()
+                MessageBox("Import Success",
+                           "Successfully imported media from the selected file(s)")
         except Exception as e:
             e = str(e)
             MessageBox("Import Failure",
