@@ -1,13 +1,41 @@
 from csv import reader
 from io import TextIOWrapper
+from json import load
 from typing import List, Union
 
 from media import Movie, LimitedSeries, Podcast, TVShow, Season, Episode
 
 
+def json_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSeries, Podcast, TVShow]]:
+    """Converts the specified JSON file or filename into a Media object
+
+    :param file: The file object or filename of the JSON file to load
+
+    :raises FileNotFoundError: If the specified filename was not found on the system
+    :raises TypeError: If the JSON file holds an unknown object type
+    """
+
+    # Load the JSON file
+    if isinstance(file, str):
+        file = open(file, "r")
+    media_list = load(file)
+    for i in range(len(media_list)):
+        media = media_list[i]
+        if "type" not in media or media["type"] not in ["Movie", "TVShow", "Podcast", "LimitedSeries"]:
+            raise TypeError(f"The media JSON object at index {i} does not have a valid type descriptor")
+        if media["type"] == "Movie":
+            media_list[i] = Movie(json=media)
+        elif media["type"] == "TVShow":
+            media_list[i] = TVShow(json=media)
+        elif media["type"] == "Podcast":
+            media_list[i] = Podcast(json=media)
+        elif media["type"] == "LimitedSeries":
+            media_list[i] = LimitedSeries(json=media)
+    return media_list
+
+
 def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSeries, Podcast, TVShow]]:
-    """Converts the specified CSV file or filename into a
-    JSON object
+    """Converts the specified CSV file or filename into a Media object
 
     :param file: The file object or filename of the CSV file to load
 
