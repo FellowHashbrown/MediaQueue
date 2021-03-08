@@ -2,6 +2,7 @@ from csv import reader
 from io import TextIOWrapper
 from json import load
 from typing import List, Union
+from uuid import uuid4
 
 from media import Movie, LimitedSeries, Podcast, TVShow, Season, Episode
 
@@ -23,6 +24,8 @@ def json_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedS
         media = media_list[i]
         if "type" not in media or media["type"] not in ["Movie", "TVShow", "Podcast", "LimitedSeries"]:
             raise TypeError(f"The media JSON object at index {i} does not have a valid type descriptor")
+        if "id" not in media:
+            media["id"] = str(uuid4())
         if media["type"] == "Movie":
             media_list[i] = Movie(json=media)
         elif media["type"] == "TVShow":
