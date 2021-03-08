@@ -25,17 +25,30 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.update_providers_func = update_providers_func
         self.update_persons_func = update_persons_func
 
-        file_menu = self.addMenu("File")
-        file_menu.addAction(" Import Media", self.import_media, "Ctrl+O")
-        file_menu.addAction(" Export Media as JSON", partial(self.export_media, "json"), "Ctrl+E")
-        file_menu.addAction(" Export Media as CSV", partial(self.export_media, "csv"), "Ctrl+Alt+E")
+        self.file_menu = self.addMenu("File")
+        self.file_menu_import_all = self.file_menu.addMenu(" Import All Media")
+        self.file_menu_import_all.addAction(
+            " From JSON", partial(self.import_media, "json"), "Ctrl+Shift+O")
+        self.file_menu_import_all.addAction(
+            " From CSV", partial(self.import_media, "csv"), "Ctrl+Alt+O")
 
-        options_menu = self.addMenu("Options")
-        options_menu.addAction(" Configure Streaming Providers", self.configure_providers, "Ctrl+1")
-        options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
+        self.file_menu_export_all = self.file_menu.addMenu(" Export All Media")
+        self.file_menu_export_all.addAction(
+            " To JSON", partial(self.export_media, "json"), "Ctrl+Shift+S")
+        self.file_menu_export_all.addAction(
+            " To CSV", partial(self.export_media, "csv"), "Ctrl+Alt+S")
 
-        help_menu = self.addMenu("Help")
-        help_menu.addAction(" Report Bug", lambda: print("report bug!"))
+        self.file_menu.addSeparator()
+        self.file_menu_export_current = self.file_menu.addMenu(" Export Current Media")
+        self.file_menu_export_current.addAction(" To JSON", partial(self.export_media, "json", True), "Ctrl+S")
+        self.file_menu_export_current.addAction(" To CSV", partial(self.export_media, "csv", True), "Ctrl+Shift+Alt+S")
+
+        self.options_menu = self.addMenu("Options")
+        self.options_menu.addAction(" Configure Streaming Providers", self.configure_providers, "Ctrl+1")
+        self.options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
+
+        self.help_menu = self.addMenu("Help")
+        self.help_menu.addAction(" Report Bug", lambda: print("report bug!"))
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -62,20 +75,41 @@ class AppMenuBar(QtWidgets.QMenuBar):
             MessageBox("Import Failure",
                        f"The import failed because: \"{e}\"")
 
-    def export_media(self, as_file: str):
+    def export_media(self, as_file: str, single: False):
         """Exports all Media into the specified filetype
 
         :param as_file: The file type to export the media as
+        :param single: Whether or not to export a single piece of Media
         """
         if not os.path.exists("exports"):
             os.mkdir("exports")
         try:
+            media = media_objects.get_media()
+            if single:
+                inner_media = None
+                if media_objects.get_movie() is not None:
+                    inner_media = media_objects.get_movie()
+                elif media_objects.get_tv_show() is not None:
+                    inner_media = media_objects.get_tv_show()
+                elif media_objects.get_podcast() is not None:
+                    inner_media = media_objects.get_podcast()
+                elif media_objects.get_limited_series() is not None:
+                    inner_media = media_objects.get_limited_series()
+
+                # Check if the media is None
+                if inner_media is None:
+                    raise ValueError("There is no specific piece of Media open right now")
+                media = inner_media
+
+            # Export the media
             if as_file == "json":
-                media_to_json(media_objects.get_media())
+                media_to_json(media)
             if as_file == "csv":
-                media_to_csv(media_objects.get_media())
+                media_to_csv(media)
             MessageBox("Export Success",
-                       f"Successfully exported all media as {as_file}")
+                       "Successfully exported {} as {}".format(
+                           "all media" if not single else f"\"{media.get_name()}\"",
+                           as_file))
         except Exception as e:
             e = str(e)
             MessageBox("Export Failure",
