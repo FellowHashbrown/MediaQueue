@@ -48,6 +48,12 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
 
         self.help_menu = self.addMenu("Help")
+        self.help_menu_usage = self.help_menu.addMenu(" How to Use")
+        self.help_menu_usage.addAction(" Home Screen")
+        self.help_menu_usage.addAction(" Filtering Episodes in a TV Show")
+        self.help_menu_usage.addAction(" Filtering Episodes in a Podcast")
+        self.help_menu_usage.addAction(" Filtering Episodes in a Limited Series")
+
         self.help_menu.addAction(" Report Bug", lambda: print("report bug!"))
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
