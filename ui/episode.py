@@ -1,4 +1,7 @@
 import sys
+from datetime import datetime
+from typing import Union
+
 from PyQt5 import QtWidgets
 
 from media import Episode
@@ -14,7 +17,7 @@ class EpisodeDialog(QtWidgets.QDialog):
     """
 
     def __init__(self, parent: QtWidgets.QWidget = None,
-                 *, show_season: bool = True):
+                 *, show_season: Union[bool, None] = True):
         super().__init__(parent)
         self.show_season = show_season
 
@@ -66,13 +69,16 @@ class EpisodeDialog(QtWidgets.QDialog):
         widget = QtWidgets.QWidget(parent)
         layout = QtWidgets.QGridLayout()
 
-        season_label = QtWidgets.QLabel("Season", widget)
+        season_label = QtWidgets.QLabel("Season" if self.show_season is not None else "Year", widget)
         episode_label = QtWidgets.QLabel("Episode", widget)
         name_label = QtWidgets.QLabel("Name", widget)
-        runtime_label = QtWidgets.QLabel("Runtime", widget)
+        runtime_label = QtWidgets.QLabel("Runtime (in minutes)", widget)
 
         self.season_spinner = QtWidgets.QSpinBox(widget)
-        self.season_spinner.setRange(1, 10000)
+        if self.show_season is not None:
+            self.season_spinner.setRange(1, 10000)
+        else:
+            self.season_spinner.setRange(1900, datetime.now().year)
         self.episode_spinner = QtWidgets.QSpinBox(widget)
         self.episode_spinner.setRange(1, 1000)
         self.name_line_edit = QtWidgets.QLineEdit(widget)
@@ -96,7 +102,7 @@ class EpisodeDialog(QtWidgets.QDialog):
                 [runtime_label, self.runtime_spinner],
                 [self.watched_checkbox]]
 
-        if not self.show_season:
+        if self.show_season is False:
             _ = grid.pop(0)
             season_label.setVisible(False)
             self.season_spinner.setVisible(False)
@@ -130,7 +136,7 @@ class EpisodeDialog(QtWidgets.QDialog):
 
         try:
             media_objects.set_episode(Episode(
-                self.season_spinner.value() if self.show_season else 1,
+                self.season_spinner.value() if self.show_season is not False else 1,
                 self.episode_spinner.value(),
                 self.name_line_edit.text() or None,
                 self.runtime_spinner.value(),

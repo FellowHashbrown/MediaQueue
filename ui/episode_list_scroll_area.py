@@ -1,4 +1,6 @@
 from functools import partial
+from typing import Union
+
 from PyQt5 import QtWidgets, QtCore
 
 from ui import add_grid_to_layout
@@ -16,7 +18,7 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
 
     def __init__(self, parent: QtWidgets.QWidget = None,
                  *, edit_episode_func: callable = None, remove_episode_func: callable = None,
-                 hide_season: bool = False):
+                 hide_season: Union[bool, None] = False):
         super().__init__(parent)
 
         # Save the parameters as attributes
@@ -53,9 +55,11 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
             widget.setStyleSheet("font-weight: bold;")
             if widget.text() == "Name":
                 widget.setAlignment(QtCore.Qt.AlignHCenter)
-        if self.hide_season:
+        if self.hide_season is True:
             self.widgets[0][1].hide()
             self.widgets[0].pop(1)  # Remove the season column label from the widget grid
+        elif self.hide_season is None:
+            self.widgets[0][1].setText("Year")
 
         # Sort the episodes and create the widgets for the Episodes
         media_objects.sort_episodes()

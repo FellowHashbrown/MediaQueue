@@ -1,4 +1,6 @@
 from functools import partial
+from typing import Union
+
 from PyQt5 import QtWidgets, QtCore
 
 from ui import EpisodeListScrollArea
@@ -19,7 +21,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
 
     def __init__(self, parent: QtWidgets.QWidget = None, flags=QtCore.Qt.WindowFlags(),
                  *, edit_episode_func: callable = None, remove_episode_func: callable = None,
-                 hide_season: bool = False):
+                 hide_season: Union[bool, None] = False):
         super().__init__(parent, flags)
         self.edit_episode_func = edit_episode_func
         self.remove_episode_func = remove_episode_func
@@ -85,14 +87,14 @@ class EpisodeListWidget(QtWidgets.QWidget):
         # Create a list of seasons to add to the filter options
         #   by going through the episodes and the unique season numbers
         #   Only if the seasons will not be hidden (like in Limited Series)
-        if not self.hide_season:
+        if self.hide_season is not True:
 
             seasons = []
             for episode in media_objects.get_episodes():
                 if episode.get_season() not in seasons:
                     seasons.append(episode.get_season())
             for season in sorted(seasons):
-                self.filter_options.append(f"Season {season}")
+                self.filter_options.append("{}{}".format("Season " if self.hide_season is False else "", season))
 
         # Clear the current items and update the filter options
         self.filter_combobox.clear()

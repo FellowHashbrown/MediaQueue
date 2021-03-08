@@ -46,7 +46,8 @@ class PodcastView(QtWidgets.QFrame):
         self.episodes_widget = EpisodeListWidget(
             self,
             edit_episode_func=self.add_edit_episode,
-            remove_episode_func=self.remove_episode)
+            remove_episode_func=self.remove_episode,
+            hide_season=None)
         layout.addWidget(self.setup_podcast_ui(self))
         layout.addWidget(self.episodes_widget, 3)
         layout.addWidget(self.setup_finish_buttons_ui(self))
@@ -258,7 +259,7 @@ class PodcastView(QtWidgets.QFrame):
             media_objects.set_episode()
         else:
             media_objects.set_episode(media_objects.get_episodes()[index])
-        episode_dialog = EpisodeDialog(self)
+        episode_dialog = EpisodeDialog(self, show_season=None)
 
         # If the Episode dialog result was accepted (Save or Ok)
         #   set the edited Episode or add a new one to the list
