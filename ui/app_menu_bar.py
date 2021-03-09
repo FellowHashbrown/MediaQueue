@@ -26,11 +26,12 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.update_persons_func = update_persons_func
 
         self.file_menu = self.addMenu("File")
-        self.file_menu_import_all = self.file_menu.addMenu(" Import All Media")
+        self.file_menu_import_all = self.file_menu.addMenu(" Import Media")
         self.file_menu_import_all.addAction(
             " From JSON", partial(self.import_media, "json"), "Ctrl+Shift+O")
         self.file_menu_import_all.addAction(
             " From CSV", partial(self.import_media, "csv"), "Ctrl+Alt+O")
+        self.file_menu.addSeparator()
 
         self.file_menu_export_all = self.file_menu.addMenu(" Export All Media")
         self.file_menu_export_all.addAction(
@@ -38,7 +39,6 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.file_menu_export_all.addAction(
             " To CSV", partial(self.export_media, "csv"), "Ctrl+Alt+S")
 
-        self.file_menu.addSeparator()
         self.file_menu_export_current = self.file_menu.addMenu(" Export Current Media")
         self.file_menu_export_current.addAction(" To JSON", partial(self.export_media, "json", True), "Ctrl+S")
         self.file_menu_export_current.addAction(" To CSV", partial(self.export_media, "csv", True), "Ctrl+Shift+Alt+S")
