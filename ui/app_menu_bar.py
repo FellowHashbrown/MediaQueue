@@ -35,9 +35,9 @@ class AppMenuBar(QtWidgets.QMenuBar):
 
         self.file_menu_export_all = self.file_menu.addMenu(" Export All Media")
         self.file_menu_export_all.addAction(
-            " To JSON", partial(self.export_media, "json"), "Ctrl+Shift+S")
+            " To JSON", partial(self.export_media, "json", False), "Ctrl+Shift+S")
         self.file_menu_export_all.addAction(
-            " To CSV", partial(self.export_media, "csv"), "Ctrl+Alt+S")
+            " To CSV", partial(self.export_media, "csv", False), "Ctrl+Alt+S")
 
         self.file_menu_export_current = self.file_menu.addMenu(" Export Current Media")
         self.file_menu_export_current.addAction(" To JSON", partial(self.export_media, "json", True), "Ctrl+S")
@@ -62,7 +62,7 @@ class AppMenuBar(QtWidgets.QMenuBar):
                                        partial(self.show_help_screenshot,
                                                HelpDialog.HelpImage.LIMITED_SERIES))
 
-        self.help_menu.addAction(" Report Bug", self.show_report_bug)
+        self.help_menu.addAction(" Report Bug or Request Feature", self.show_report_bug)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
