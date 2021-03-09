@@ -11,7 +11,6 @@ from ui.scroll_widgets.media_list_widget import MediaListWidget
 from ui.scroll_widgets.person_list_scroll_area import PersonListScrollArea
 from ui.scroll_widgets.provider_list_scroll_area import ProviderListScrollArea
 
-from ui.dialogs.help_dialog import HelpDialog
 from ui.dialogs.provider_dialog import ProviderDialog
 from ui.dialogs.person_dialog import PersonDialog
 
