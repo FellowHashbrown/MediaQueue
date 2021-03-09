@@ -24,7 +24,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='Media Queue',
+          name='MediaQueue',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -46,7 +46,7 @@ if sys.platform == "darwin":
                  icon="media_queue.icns",
                  info_plist = {
                     "NSHighResolutionCapable": "True",
-                    "CFBundleVersion": "0.1.2",
+                    "CFBundleVersion": "0.1.0",
                     "CFBundleShortVersionString": "0.1.0"
                  },
-                 bundle_identifier=None)
+                 bundle_identifier="com.FellowHashbrown.MediaQueue")
