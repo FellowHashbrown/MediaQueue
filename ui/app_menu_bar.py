@@ -1,9 +1,10 @@
 import os
+from enum import Enum
 from functools import partial
 from PyQt5 import QtWidgets
 
 from ui import media_objects, MessageBox
-from ui import ProviderDialog, PersonDialog, HelpDialog
+from ui import ProviderDialog, PersonDialog
 from util import json_to_media, csv_to_media, media_to_json, media_to_csv
 
 
@@ -28,20 +29,20 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.file_menu = self.addMenu("File")
         self.file_menu_import_all = self.file_menu.addMenu(" Import Media")
         self.file_menu_import_all.addAction(
-            " From JSON", partial(self.import_media, "json"), "Ctrl+Shift+O")
+            " From JSON", partial(self.import_media, "json"), "Ctrl+O")
         self.file_menu_import_all.addAction(
-            " From CSV", partial(self.import_media, "csv"), "Ctrl+Alt+O")
+            " From CSV", partial(self.import_media, "csv"), "Ctrl+Shift+O")
         self.file_menu.addSeparator()
-
-        self.file_menu_export_all = self.file_menu.addMenu(" Export All Media")
-        self.file_menu_export_all.addAction(
-            " To JSON", partial(self.export_media, "json", False), "Ctrl+Shift+S")
-        self.file_menu_export_all.addAction(
-            " To CSV", partial(self.export_media, "csv", False), "Ctrl+Alt+S")
 
         self.file_menu_export_current = self.file_menu.addMenu(" Export Current Media")
         self.file_menu_export_current.addAction(" To JSON", partial(self.export_media, "json", True), "Ctrl+S")
-        self.file_menu_export_current.addAction(" To CSV", partial(self.export_media, "csv", True), "Ctrl+Shift+Alt+S")
+        self.file_menu_export_current.addAction(" To CSV", partial(self.export_media, "csv", True), "Ctrl+Shift+S")
+
+        self.file_menu_export_all = self.file_menu.addMenu(" Export All Media")
+        self.file_menu_export_all.addAction(
+            " To JSON", partial(self.export_media, "json", False), "Alt+S")
+        self.file_menu_export_all.addAction(
+            " To CSV", partial(self.export_media, "csv", False), "Alt+Shift+S")
 
         self.options_menu = self.addMenu("Options")
         self.options_menu.addAction(" Configure Streaming Providers", self.configure_providers, "Ctrl+1")
@@ -49,18 +50,6 @@ class AppMenuBar(QtWidgets.QMenuBar):
 
         self.help_menu = self.addMenu("Help")
         self.help_menu_usage = self.help_menu.addMenu(" How to Use")
-        self.help_menu_usage.addAction(" Home Screen",
-                                       partial(self.show_help_screenshot,
-                                               HelpDialog.HelpImage.HOME))
-        self.help_menu_usage.addAction(" Filtering Episodes in a TV Show",
-                                       partial(self.show_help_screenshot,
-                                               HelpDialog.HelpImage.TV_SHOW))
-        self.help_menu_usage.addAction(" Filtering Episodes in a Podcast",
-                                       partial(self.show_help_screenshot,
-                                               HelpDialog.HelpImage.PODCAST))
-        self.help_menu_usage.addAction(" Filtering Episodes in a Limited Series",
-                                       partial(self.show_help_screenshot,
-                                               HelpDialog.HelpImage.LIMITED_SERIES))
 
         self.help_menu.addAction(" Report Bug or Request Feature", self.show_report_bug)
 
@@ -145,13 +134,14 @@ class AppMenuBar(QtWidgets.QMenuBar):
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    def show_help_screenshot(self, image: HelpDialog.HelpImage):
+    def show_help_screenshot(self, image):
         """Shows the user a dialog on how to use the specified object
         or screen in the Media Queue app
 
         :param image: The HelpImage enum type to show
         """
-        HelpDialog(image).exec_()
+        # HelpDialog(image).exec_()
+        pass
 
     def show_report_bug(self):
         """Shows the user a dialog on how to report a bug in Media Queue"""
