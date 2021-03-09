@@ -6,5 +6,3 @@ from .export_utils import media_to_csv
 from .export_utils import media_to_json
 
 from .options import options
-
-from .resources import resource_path
