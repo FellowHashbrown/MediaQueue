@@ -3,8 +3,8 @@ from functools import partial
 from PyQt5 import QtWidgets
 
 from ui import media_objects, MessageBox
-from ui import ProviderDialog, PersonDialog
-from util import csv_to_media, media_to_json, media_to_csv
+from ui import ProviderDialog, PersonDialog, HelpDialog
+from util import json_to_media, csv_to_media, media_to_json, media_to_csv
 
 
 class AppMenuBar(QtWidgets.QMenuBar):
@@ -49,27 +49,39 @@ class AppMenuBar(QtWidgets.QMenuBar):
 
         self.help_menu = self.addMenu("Help")
         self.help_menu_usage = self.help_menu.addMenu(" How to Use")
-        self.help_menu_usage.addAction(" Home Screen")
-        self.help_menu_usage.addAction(" Filtering Episodes in a TV Show")
-        self.help_menu_usage.addAction(" Filtering Episodes in a Podcast")
-        self.help_menu_usage.addAction(" Filtering Episodes in a Limited Series")
+        self.help_menu_usage.addAction(" Home Screen",
+                                       partial(self.show_help_screenshot,
+                                               HelpDialog.HelpImage.HOME))
+        self.help_menu_usage.addAction(" Filtering Episodes in a TV Show",
+                                       partial(self.show_help_screenshot,
+                                               HelpDialog.HelpImage.TV_SHOW))
+        self.help_menu_usage.addAction(" Filtering Episodes in a Podcast",
+                                       partial(self.show_help_screenshot,
+                                               HelpDialog.HelpImage.PODCAST))
+        self.help_menu_usage.addAction(" Filtering Episodes in a Limited Series",
+                                       partial(self.show_help_screenshot,
+                                               HelpDialog.HelpImage.LIMITED_SERIES))
 
-        self.help_menu.addAction(" Report Bug", lambda: print("report bug!"))
+        self.help_menu.addAction(" Report Bug", self.show_report_bug)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    def import_media(self):
+    def import_media(self, as_file: str):
         """Asks the user to select a file to import.
         The user will only be able to select .csv files
         """
         try:
             filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                 None, "Select Media", ".",
-                "CSV Files(*.csv)")
+                "CSV Files(*.csv)" if as_file == "csv" else "JSON Files(*.json)")
             if len(filenames) > 0:
+                if as_file == "csv":
+                    target_load_func = csv_to_media
+                else:
+                    target_load_func = json_to_media
                 media = []
                 for filename in filenames:
-                    for media_obj in csv_to_media(filename):
+                    for media_obj in target_load_func(filename):
                         media.append(media_obj)
                         media_obj.save()
                 media_objects.get_media().extend(media)
@@ -130,3 +142,20 @@ class AppMenuBar(QtWidgets.QMenuBar):
     def configure_persons(self):
         """Allows a user to configure the Persons in the application"""
         PersonDialog(self, update_func=self.update_persons_func).exec_()
+
+    # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    def show_help_screenshot(self, image: HelpDialog.HelpImage):
+        """Shows the user a dialog on how to use the specified object
+        or screen in the Media Queue app
+
+        :param image: The HelpImage enum type to show
+        """
+        HelpDialog(image).exec_()
+
+    def show_report_bug(self):
+        """Shows the user a dialog on how to report a bug in Media Queue"""
+        MessageBox("How to Report a Bug",
+                   "In order to report a bug, I ask that you go here to do so",
+                   link_title="Github Bug Reporter",
+                   link_url="https://github.com/FellowHashbrown/MediaQueue/issues/new/choose")
