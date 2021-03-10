@@ -95,18 +95,22 @@ class Home(QtWidgets.QFrame):
         self.filter_start_finish_combobox.addItems(["All", "Started", "Finished",
                                                     "Not Started", "Not Finished", "Neither"])
         self.filter_start_finish_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
+        self.filter_start_finish_combobox.setToolTip("Filter the media by their started and finished status")
 
         self.filter_type_combobox = QtWidgets.QComboBox(widget)
         self.filter_type_combobox.addItems(["All"] + get_type())
         self.filter_type_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
+        self.filter_type_combobox.setToolTip("Filter the media by their type")
 
         self.filter_provider_combobox = QtWidgets.QComboBox(widget)
         self.filter_provider_combobox.addItems(["All"] + [provider for provider in options.get_providers()])
         self.filter_provider_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
+        self.filter_provider_combobox.setToolTip("Filter the media by the streaming provider")
 
         self.filter_person_combobox = QtWidgets.QComboBox(widget)
         self.filter_person_combobox.addItems(["All"] + [person for person in options.get_persons()])
         self.filter_person_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
+        self.filter_person_combobox.setToolTip("Filter the media by who is watching")
 
         self.clear_filter_button = QtWidgets.QPushButton("Clear Filter", widget)
         self.clear_filter_button.clicked.connect(partial(self.filter_media, True))
@@ -152,15 +156,15 @@ class Home(QtWidgets.QFrame):
 
         self.add_tv_show_button = QtWidgets.QPushButton("Add TV Show", self)
         self.add_tv_show_button.clicked.connect(partial(self.add_edit_media, 'TV Show', None))
-        self.add_movie_button.setToolTip("Add a new TV Show to the media queue")
+        self.add_tv_show_button.setToolTip("Add a new TV Show to the media queue")
 
         self.add_podcast_button = QtWidgets.QPushButton("Add Podcast", self)
         self.add_podcast_button.clicked.connect(partial(self.add_edit_media, 'Podcast', None))
-        self.add_movie_button.setToolTip("Add a new Podcast to the media queue")
+        self.add_podcast_button.setToolTip("Add a new Podcast to the media queue")
 
         self.add_limited_series_button = QtWidgets.QPushButton("Add Limited Series", self)
         self.add_limited_series_button.clicked.connect(partial(self.add_edit_media, 'Limited Series', None))
-        self.add_movie_button.setToolTip("Add a new Limited Series to the media queue")
+        self.add_limited_series_button.setToolTip("Add a new Limited Series to the media queue")
 
         grid = [[self.add_movie_button, self.add_tv_show_button,
                  self.add_podcast_button, self.add_limited_series_button]]
