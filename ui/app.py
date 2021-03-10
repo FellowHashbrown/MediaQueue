@@ -1,8 +1,10 @@
 import sys
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 from ui import Home, TVShowView, PodcastView, LimitedSeriesView
 from ui import AppMenuBar
+
+from util import resource_path
 
 
 class MediaQueue(QtWidgets.QApplication):
@@ -19,6 +21,8 @@ class MediaQueue(QtWidgets.QApplication):
         # Set up the Main Window
         self.window = QtWidgets.QMainWindow()
         self.window.setWindowTitle("Media Queue")
+        self.window.setWindowIcon(QtGui.QIcon(resource_path(
+            "mediaqueue.ico" if sys.platform != "darwin" else "mediaqueue.icns")))
 
         # Set up the layout
         self.widget = QtWidgets.QStackedWidget(self.window)

@@ -16,6 +16,10 @@ a = Analysis(['main.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+a.datas += [
+    ("mediaqueue.ico", "C:/Users/pierc/Desktop/Coding/Python/MediaQueue/mediaqueue.ico", "DATA"),
+    ("mediaqueue.icns", "C:/Users/pierc/Desktop/Coding/Python/MediaQueue/mediaqueue.icns", "DATA")
+]
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
