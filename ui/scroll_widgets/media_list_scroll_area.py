@@ -120,6 +120,7 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
         if started and finished:
             self.widgets[index + 1][1].setChecked(False)
         media_objects.get_media()[index].set_started(started)
+        media_objects.get_media()[index].save()
         self.filter()
 
     def update_finish(self, index: int):
@@ -136,6 +137,7 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
         if finished and started:
             self.widgets[index + 1][0].setChecked(False)
         media_objects.get_media()[index].set_finished(finished)
+        media_objects.get_media()[index].save()
         self.filter()
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
