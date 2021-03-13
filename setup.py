@@ -5,15 +5,30 @@ Usage:
     python setup.py py2app
 """
 
+import sys
 from setuptools import setup
 
-APP = ['MediaQueue.py']
-DATA_FILES = []
-OPTIONS = {'iconfile': 'mediaqueue.icns'}
+main_script = "MediaQueue.py"
 
-setup(
-    app=APP,
-    data_files=DATA_FILES,
-    options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
-)
+if sys.platform == "darwin":
+    extra_options = dict(
+        app=[main_script],
+        options=dict(
+            py2app=dict(
+                argv_emulation=True,
+                iconfile="mediaqueue.icns")),
+        setup_requires=["py2app"])
+
+elif sys.platform == "win32":
+    extra_options = dict(
+        app=[main_script],
+        zipfile=None,
+        options=dict(
+            py2exe=dict(
+                bundle_files=1,
+                iconfile="mediaqueue.ico")),
+        setup_requires=["py2exe"])
+else:
+    extra_options = dict(scripts=[main_script])
+
+setup(name="MediaQueue", **extra_options)
