@@ -49,8 +49,6 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
 
         self.help_menu = self.addMenu("Help")
-        self.help_menu_usage = self.help_menu.addMenu(" How to Use")
-
         self.help_menu.addAction(" Report Bug or Request Feature", self.show_report_bug)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -133,15 +131,6 @@ class AppMenuBar(QtWidgets.QMenuBar):
         PersonDialog(self, update_func=self.update_persons_func).exec_()
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
-
-    def show_help_screenshot(self, image):
-        """Shows the user a dialog on how to use the specified object
-        or screen in the Media Queue app
-
-        :param image: The HelpImage enum type to show
-        """
-        # HelpDialog(image).exec_()
-        pass
 
     def show_report_bug(self):
         """Shows the user a dialog on how to report a bug in Media Queue"""
