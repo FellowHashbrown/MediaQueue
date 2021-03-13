@@ -253,6 +253,7 @@ class MediaObjects:
             if i in self.get_removed_media():
                 continue
             if self.__media_filter["search"] is not None:
+                # noinspection PyUnresolvedReferences
                 if self.__media_filter["search"].lower() not in medium.get_name().lower():
                     continue
             if self.__media_filter["started"] is not None:
@@ -272,6 +273,7 @@ class MediaObjects:
                     continue
             self.__filtered_media.append(medium)
 
+    # noinspection PyTypeChecker
     def set_media_sort(self, *, media_type: bool = True, provider: bool = True,
                        person: bool = True, runtime: bool = True, name: bool = True):
         """Sets the sorts for the Media on the Home screen
@@ -300,6 +302,7 @@ class MediaObjects:
         if self.__media_sort["type"] is False:
             self.__media_sort["type"] = None
         else:
+            # noinspection PyTypeChecker
             self.__media_sort["type"] = not self.__media_sort["type"]
         self.sort_media()
 
@@ -308,6 +311,7 @@ class MediaObjects:
         if self.__media_sort["provider"] is False:
             self.__media_sort["provider"] = None
         else:
+            # noinspection PyTypeChecker
             self.__media_sort["provider"] = not self.__media_sort["provider"]
         self.sort_media()
 
@@ -316,6 +320,7 @@ class MediaObjects:
         if self.__media_sort["person"] is False:
             self.__media_sort["person"] = None
         else:
+            # noinspection PyTypeChecker
             self.__media_sort["person"] = not self.__media_sort["person"]
         self.sort_media()
 
@@ -324,6 +329,7 @@ class MediaObjects:
         if self.__media_sort["runtime"] is False:
             self.__media_sort["runtime"] = None
         else:
+            # noinspection PyTypeChecker
             self.__media_sort["runtime"] = not self.__media_sort["runtime"]
         self.sort_media()
 
@@ -332,6 +338,7 @@ class MediaObjects:
         if self.__media_sort["name"] is False:
             self.__media_sort["name"] = None
         else:
+            # noinspection PyTypeChecker
             self.__media_sort["name"] = not self.__media_sort["name"]
         self.sort_media()
 
