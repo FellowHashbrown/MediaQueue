@@ -10,25 +10,39 @@ class MediaQueueOptions:
     and the People to keep track of
     """
 
-    def __init__(self):
+    __instance = None
+
+    @staticmethod
+    def get_instance():
+        if MediaQueueOptions.__instance is None:
+            MediaQueueOptions()
+        return MediaQueueOptions.__instance
+
+    def __init__(self, base_dir: str = None):
+
+        if MediaQueueOptions.__instance is not None:
+            raise TypeError("An instance of MediaQueueOptions already exists! Use .get_instance()")
+        else:
+            MediaQueueOptions.__instance = self
         self.__providers = []
         self.__persons = []
+        self.__base_dir = None
 
         # Check if the options file exists
-        if not os.path.exists("data"):
-            os.mkdir("data")
-        if not os.path.exists("data/options.json"):
-            with open("data/options.json", "w") as options_file:
+        if not os.path.exists("options.json"):
+            with open("options.json", "w") as options_file:
                 dump({
-                    "providers": ["Default"],
-                    "persons": ["Default"]
-                }, options_file)
+                    "providers": [],
+                    "persons": [],
+                    "base_dir": self.__base_dir
+                }, options_file, indent=4)
 
         # Load the file
-        with open("data/options.json", "r") as options_file:
+        with open("options.json", "r") as options_file:
             options = load(options_file)
             self.__providers = options["providers"]
             self.__persons = options["persons"]
+            self.__base_dir = options["base_dir"]
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -39,6 +53,15 @@ class MediaQueueOptions:
     def get_persons(self) -> List[str]:
         """Returns the list of Persons in the options"""
         return self.__persons + ["Default"]
+
+    def get_base_dir(self) -> str:
+        """Returns the base directory of where the user wants their data to go"""
+        return self.__base_dir
+
+    def set_base_dir(self, base_dir: str):
+        """Sets the base directory to store all the data"""
+        self.__base_dir = base_dir
+        self.save()
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -101,8 +124,9 @@ class MediaQueueOptions:
         with open("data/options.json", "w") as options_file:
             dump({
                 "providers": self.__providers,
-                "persons": self.__persons
+                "persons": self.__persons,
+                "base_dir": self.__base_dir
             }, options_file, indent=4)
 
 
-options = MediaQueueOptions()
+options = MediaQueueOptions.get_instance()

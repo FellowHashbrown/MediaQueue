@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 from media import Movie, TVShow, Podcast, LimitedSeries
 from media.util import get_type
 from ui import MovieDialog, MediaListWidget, add_grid_to_layout, media_objects
-from util import options
+from options import options
 
 
 class Home(QtWidgets.QFrame):
@@ -60,6 +60,13 @@ class Home(QtWidgets.QFrame):
         self.clear_filter_button = None
         self.search_line_edit = None
 
+        self.sort_type_button = None
+        self.sort_provider_button = None
+        self.sort_person_button = None
+        self.sort_runtime_button = None
+        self.sort_name_button = None
+        self.clear_sort_button = None
+
         self.add_limited_series_button = None
         self.add_movie_button = None
         self.add_tv_show_button = None
@@ -75,6 +82,7 @@ class Home(QtWidgets.QFrame):
         layout = QtWidgets.QVBoxLayout()
 
         layout.addWidget(self.setup_filters_ui(self))
+        layout.addWidget(self.setup_sort_ui(self))
         layout.addWidget(self.media_list_widget, 1)
         layout.addWidget(self.setup_new_buttons_ui())
 
@@ -137,6 +145,49 @@ class Home(QtWidgets.QFrame):
                 [self.filter_start_finish_combobox, None,
                  self.filter_type_combobox, self.filter_provider_combobox,
                  self.filter_person_combobox, self.clear_filter_button, None, None]]
+
+        add_grid_to_layout(widgets, layout)
+
+        widget.setLayout(layout)
+
+        return widget
+
+    def setup_sort_ui(self, parent: QtWidgets.QWidget) -> QtWidgets.QWidget:
+        """Creates and returns a grid of widgets necessary for
+        the sorting widgets
+
+        :param parent: The parent widget for the filter widgets
+        """
+
+        widget = QtWidgets.QWidget(parent)
+        layout = QtWidgets.QGridLayout()
+
+        self.sort_type_button = QtWidgets.QPushButton("Sort By Type")
+        self.sort_type_button.clicked.connect(partial(self.cycle_sort, "type"))
+        self.sort_type_button.setToolTip("Sort the Media by the Type")
+
+        self.sort_provider_button = QtWidgets.QPushButton("Sort By Streaming Provider")
+        self.sort_provider_button.clicked.connect(partial(self.cycle_sort, "provider"))
+        self.sort_provider_button.setToolTip("Sort the Media by the Streaming Provider")
+
+        self.sort_person_button = QtWidgets.QPushButton("Sort By Person")
+        self.sort_person_button.clicked.connect(partial(self.cycle_sort, "person"))
+        self.sort_person_button.setToolTip("Sort the Media by the Person")
+
+        self.sort_runtime_button = QtWidgets.QPushButton("Sort By Runtime")
+        self.sort_runtime_button.clicked.connect(partial(self.cycle_sort, "runtime"))
+        self.sort_runtime_button.setToolTip("Sort the Media by the Runtime")
+
+        self.sort_name_button = QtWidgets.QPushButton("Sort By Name")
+        self.sort_name_button.clicked.connect(partial(self.cycle_sort, "name"))
+        self.sort_name_button.setToolTip("Sort the Media by the Name")
+
+        self.clear_sort_button = QtWidgets.QPushButton("Clear Sorting")
+        self.clear_sort_button.clicked.connect(partial(self.sort_media, True))
+        self.clear_sort_button.setToolTip("Clear the sorting on the Media to the default")
+
+        widgets = [[self.sort_type_button, self.sort_provider_button, self.sort_person_button,
+                    self.sort_runtime_button, self.sort_name_button, self.clear_sort_button]]
 
         add_grid_to_layout(widgets, layout)
 
@@ -236,9 +287,59 @@ class Home(QtWidgets.QFrame):
         media_objects.set_media_filters(
             started=filter_start_finish[0], finished=filter_start_finish[1],
             media_type=filter_type, provider=filter_provider,
-            person=filter_person, search=filter_search
-        )
+            person=filter_person, search=filter_search)
         self.media_list_widget.update_stats()
+        self.media_list_widget.scroll_area.filter()
+
+    def cycle_sort(self, sort: str):
+        """Cycles the specified sorting variable to the next sort value
+
+        :param sort: The sorting variable to cycle
+        """
+
+        # Cycle the correct sort
+        if sort == "type":
+            media_objects.cycle_type_sort()
+            self.sort_type_button.setText("Sort By Type {}".format(
+                "▲" if media_objects.get_type_sort() else
+                ("▼" if media_objects.get_type_sort() is False else "")))
+        elif sort == "provider":
+            media_objects.cycle_provider_sort()
+            self.sort_provider_button.setText("Sort By Provider {}".format(
+                "▲" if media_objects.get_provider_sort() else
+                ("▼" if media_objects.get_provider_sort() is False else "")))
+        elif sort == "person":
+            media_objects.cycle_person_sort()
+            self.sort_person_button.setText("Sort By Person {}".format(
+                "▲" if media_objects.get_person_sort() else
+                ("▼" if media_objects.get_person_sort() is False else "")))
+        elif sort == "runtime":
+            media_objects.cycle_runtime_sort()
+            self.sort_runtime_button.setText("Sort By Runtime {}".format(
+                "▲" if media_objects.get_runtime_sort() else
+                ("▼" if media_objects.get_runtime_sort() is False else "")))
+        elif sort == "name":
+            media_objects.cycle_name_sort()
+            self.sort_name_button.setText("Sort By Name {}".format(
+                "▲" if media_objects.get_name_sort() else
+                ("▼" if media_objects.get_name_sort() is False else "")))
+
+        self.sort_media()
+
+    def sort_media(self, clear: bool = False):
+        """Sorts the Media in the app based off the sorting values
+
+        :param clear: Whether or not to set the sorting values to their defaults
+        """
+        if clear:
+            media_objects.set_media_sort()
+            self.sort_type_button.setText("Sort By Type")
+            self.sort_provider_button.setText("Sort By Streaming Provider")
+            self.sort_person_button.setText("Sort By Person")
+            self.sort_runtime_button.setText("Sort By Runtime")
+            self.sort_name_button.setText("Sort By Name")
+
+        self.media_list_widget.scroll_area.update_ui()
         self.media_list_widget.scroll_area.filter()
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
