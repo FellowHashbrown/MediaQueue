@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets, QtCore
 from media import Season, Episode, TVShow
 from ui import MessageBox, add_grid_to_layout, EpisodeDialog, EpisodeListWidget
 from ui import media_objects
-from util import options
+from options import options
 
 
 class TVShowView(QtWidgets.QFrame):
