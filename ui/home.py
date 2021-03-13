@@ -34,16 +34,16 @@ class Home(QtWidgets.QFrame):
         media = []
         paths = [Movie.FOLDER, TVShow.FOLDER, Podcast.FOLDER, LimitedSeries.FOLDER]
         for path in paths:
-            if os.path.exists(f"./data/{path}"):
-                for file in os.listdir(f"./data/{path}"):
+            if os.path.exists(f"{options.get_base_dir()}/data/{path}"):
+                for file in os.listdir(f"{options.get_base_dir()}/data/{path}"):
                     if path == Movie.FOLDER and file.endswith(".json"):
-                        media.append(Movie(filename=f"./data/{path}/{file}"))
+                        media.append(Movie(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
                     elif path == TVShow.FOLDER and file.endswith(".json"):
-                        media.append(TVShow(filename=f"./data/{path}/{file}"))
+                        media.append(TVShow(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
                     elif path == Podcast.FOLDER and file.endswith(".json"):
-                        media.append(Podcast(filename=f"./data/{path}/{file}"))
+                        media.append(Podcast(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
                     elif path == LimitedSeries.FOLDER and file.endswith(".json"):
-                        media.append(LimitedSeries(filename=f"./data/{path}/{file}"))
+                        media.append(LimitedSeries(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
         media_objects.set_media(media)
 
         # Setup the MediaListWidget and the attributes for the filter comboboxes
@@ -96,35 +96,35 @@ class Home(QtWidgets.QFrame):
         :param parent: The parent widget for the filter widgets
         """
 
-        widget = QtWidgets.QWidget(parent)
+        filters_widget = QtWidgets.QWidget(parent)
         layout = QtWidgets.QGridLayout()
 
-        self.filter_start_finish_combobox = QtWidgets.QComboBox(widget)
+        self.filter_start_finish_combobox = QtWidgets.QComboBox(parent)
         self.filter_start_finish_combobox.addItems(["All", "Started", "Finished",
                                                     "Not Started", "Not Finished", "Neither"])
         self.filter_start_finish_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
         self.filter_start_finish_combobox.setToolTip("Filter the media by their started and finished status")
 
-        self.filter_type_combobox = QtWidgets.QComboBox(widget)
+        self.filter_type_combobox = QtWidgets.QComboBox(parent)
         self.filter_type_combobox.addItems(["All"] + get_type())
         self.filter_type_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
         self.filter_type_combobox.setToolTip("Filter the media by their type")
 
-        self.filter_provider_combobox = QtWidgets.QComboBox(widget)
+        self.filter_provider_combobox = QtWidgets.QComboBox(parent)
         self.filter_provider_combobox.addItems(["All"] + [provider for provider in options.get_providers()])
         self.filter_provider_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
         self.filter_provider_combobox.setToolTip("Filter the media by the streaming provider")
 
-        self.filter_person_combobox = QtWidgets.QComboBox(widget)
+        self.filter_person_combobox = QtWidgets.QComboBox(parent)
         self.filter_person_combobox.addItems(["All"] + [person for person in options.get_persons()])
         self.filter_person_combobox.currentIndexChanged.connect(partial(self.filter_media, False))
         self.filter_person_combobox.setToolTip("Filter the media by who is watching")
 
-        self.clear_filter_button = QtWidgets.QPushButton("Clear Filter", widget)
+        self.clear_filter_button = QtWidgets.QPushButton("Clear Filter", parent)
         self.clear_filter_button.clicked.connect(partial(self.filter_media, True))
         self.clear_filter_button.setToolTip("Clear all media filters")
 
-        self.search_line_edit = QtWidgets.QLineEdit(widget)
+        self.search_line_edit = QtWidgets.QLineEdit(parent)
         self.search_line_edit.setPlaceholderText("Search")
         self.search_line_edit.textChanged.connect(partial(self.filter_media, False))
         self.search_line_edit.setToolTip("Search for specific media in the media queue")
@@ -142,15 +142,13 @@ class Home(QtWidgets.QFrame):
                 label.setAlignment(QtCore.Qt.AlignHCenter)
 
         widgets = [filter_labels,
-                [self.filter_start_finish_combobox, None,
-                 self.filter_type_combobox, self.filter_provider_combobox,
-                 self.filter_person_combobox, self.clear_filter_button, None, None]]
+                   [self.filter_start_finish_combobox, None,
+                    self.filter_type_combobox, self.filter_provider_combobox,
+                    self.filter_person_combobox, self.clear_filter_button, None, None]]
 
         add_grid_to_layout(widgets, layout)
-
-        widget.setLayout(layout)
-
-        return widget
+        filters_widget.setLayout(layout)
+        return filters_widget
 
     def setup_sort_ui(self, parent: QtWidgets.QWidget) -> QtWidgets.QWidget:
         """Creates and returns a grid of widgets necessary for
@@ -159,41 +157,39 @@ class Home(QtWidgets.QFrame):
         :param parent: The parent widget for the filter widgets
         """
 
-        widget = QtWidgets.QWidget(parent)
+        sort_widgets = QtWidgets.QWidget(parent)
         layout = QtWidgets.QGridLayout()
 
-        self.sort_type_button = QtWidgets.QPushButton("Sort By Type")
+        self.sort_type_button = QtWidgets.QPushButton("Sort By Type", parent)
         self.sort_type_button.clicked.connect(partial(self.cycle_sort, "type"))
         self.sort_type_button.setToolTip("Sort the Media by the Type")
 
-        self.sort_provider_button = QtWidgets.QPushButton("Sort By Streaming Provider")
+        self.sort_provider_button = QtWidgets.QPushButton("Sort By Streaming Provider", parent)
         self.sort_provider_button.clicked.connect(partial(self.cycle_sort, "provider"))
         self.sort_provider_button.setToolTip("Sort the Media by the Streaming Provider")
 
-        self.sort_person_button = QtWidgets.QPushButton("Sort By Person")
+        self.sort_person_button = QtWidgets.QPushButton("Sort By Person", parent)
         self.sort_person_button.clicked.connect(partial(self.cycle_sort, "person"))
         self.sort_person_button.setToolTip("Sort the Media by the Person")
 
-        self.sort_runtime_button = QtWidgets.QPushButton("Sort By Runtime")
+        self.sort_runtime_button = QtWidgets.QPushButton("Sort By Runtime", parent)
         self.sort_runtime_button.clicked.connect(partial(self.cycle_sort, "runtime"))
         self.sort_runtime_button.setToolTip("Sort the Media by the Runtime")
 
-        self.sort_name_button = QtWidgets.QPushButton("Sort By Name")
+        self.sort_name_button = QtWidgets.QPushButton("Sort By Name", parent)
         self.sort_name_button.clicked.connect(partial(self.cycle_sort, "name"))
         self.sort_name_button.setToolTip("Sort the Media by the Name")
 
-        self.clear_sort_button = QtWidgets.QPushButton("Clear Sorting")
+        self.clear_sort_button = QtWidgets.QPushButton("Clear Sorting", parent)
         self.clear_sort_button.clicked.connect(partial(self.sort_media, True))
         self.clear_sort_button.setToolTip("Clear the sorting on the Media to the default")
 
-        widgets = [[self.sort_type_button, self.sort_provider_button, self.sort_person_button,
+        widgets = [[None, self.sort_type_button, self.sort_provider_button, self.sort_person_button,
                     self.sort_runtime_button, self.sort_name_button, self.clear_sort_button]]
 
         add_grid_to_layout(widgets, layout)
-
-        widget.setLayout(layout)
-
-        return widget
+        sort_widgets.setLayout(layout)
+        return sort_widgets
 
     def setup_new_buttons_ui(self):
         """Creates the buttons meant to be used when adding a new piece of Media"""
@@ -355,7 +351,7 @@ class Home(QtWidgets.QFrame):
             self.filter_media()
 
             media = media_objects.get_media()[index]
-            os.remove(f"./data/{media.FOLDER}/{media.get_id()}.json")
+            os.remove(f"{options.get_base_dir()}/data/{media.FOLDER}/{media.get_id()}.json")
 
     def callback_tv_show(self, index: int = None, canceled: bool = False):
         """The callback function when a user is finished editing a TV Show
