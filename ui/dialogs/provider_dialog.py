@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 
 from ui import MessageBox, ProviderListScrollArea
-from util import options
+from options import options
 
 
 class ProviderDialog(QtWidgets.QDialog):

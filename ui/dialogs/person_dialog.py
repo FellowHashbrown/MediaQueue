@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 
 from ui import MessageBox, PersonListScrollArea
-from util import options
+from options import options
 
 
 class PersonDialog(QtWidgets.QDialog):

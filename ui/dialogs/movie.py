@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 
 from media import Movie
 from ui import MessageBox, add_grid_to_layout, media_objects
-from util import options
+from options import options
 
 
 class MovieDialog(QtWidgets.QDialog):
