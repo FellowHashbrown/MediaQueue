@@ -1,5 +1,5 @@
 from functools import cmp_to_key
-from typing import List
+from typing import List, Union
 
 from media import Media, Episode, Movie, TVShow, Podcast, LimitedSeries
 from media.util import get_type
@@ -30,6 +30,9 @@ class MediaObjects:
             "started": None, "finished": None,
             "type": None, "provider": None,
             "person": None, "search": None}
+        self.__media_sort = {
+            "type": None, "provider": None,
+            "person": None, "runtime": None, "name": None}
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -146,8 +149,29 @@ class MediaObjects:
 
     def get_filtered_media(self) -> List[Media]:
         """Returns the filtered Media based off the Media Filter"""
+        self.sort_media()
         self.filter_media()
         return self.__filtered_media
+
+    def get_type_sort(self) -> Union[bool, None]:
+        """Returns the sort state of the type attribute"""
+        return self.__media_sort["type"]
+
+    def get_provider_sort(self) -> Union[bool, None]:
+        """Returns the sort state of the provider attribute"""
+        return self.__media_sort["provider"]
+
+    def get_person_sort(self) -> Union[bool, None]:
+        """Returns the sort state of the person attribute"""
+        return self.__media_sort["person"]
+
+    def get_runtime_sort(self) -> Union[bool, None]:
+        """Returns the sort state of the runtime attribute"""
+        return self.__media_sort["runtime"]
+
+    def get_name_sort(self) -> Union[bool, None]:
+        """Returns the sort state of the name attribute"""
+        return self.__media_sort["name"]
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -248,41 +272,111 @@ class MediaObjects:
                     continue
             self.__filtered_media.append(medium)
 
+    def set_media_sort(self, *, media_type: bool = True, provider: bool = True,
+                       person: bool = True, runtime: bool = True, name: bool = True):
+        """Sets the sorts for the Media on the Home screen
+
+        The possible values are:
+        * True: Sort ascending on the attribute
+        * False: Sort descending on the attribute
+        * None: Ignore sorting for the attribute
+
+        :keyword media_type: The type sorting to use. (Defaults to True)
+        :keyword provider: The provider sorting to use. (Defaults to True)
+        :keyword person: The person sorting to use. (Defaults to True)
+        :keyword runtime: The runtime sorting to use. (Defaults to True)
+        :keyword name: The name sorting to use. (Defaults to True)
+        """
+
+        self.__media_sort["type"] = media_type
+        self.__media_sort["provider"] = provider
+        self.__media_sort["person"] = person
+        self.__media_sort["runtime"] = runtime
+        self.__media_sort["name"] = name
+        self.sort_media()
+
+    def cycle_type_sort(self):
+        """Cycles the type sort to the next sorting state"""
+        if self.__media_sort["type"] is False:
+            self.__media_sort["type"] = None
+        else:
+            self.__media_sort["type"] = not self.__media_sort["type"]
+        self.sort_media()
+
+    def cycle_provider_sort(self):
+        """Cycles the provider sort to the next sorting state"""
+        if self.__media_sort["provider"] is False:
+            self.__media_sort["provider"] = None
+        else:
+            self.__media_sort["provider"] = not self.__media_sort["provider"]
+        self.sort_media()
+
+    def cycle_person_sort(self):
+        """Cycles the person sort to the next sorting state"""
+        if self.__media_sort["person"] is False:
+            self.__media_sort["person"] = None
+        else:
+            self.__media_sort["person"] = not self.__media_sort["person"]
+        self.sort_media()
+
+    def cycle_runtime_sort(self):
+        """Cycles the runtime sort to the next sorting state"""
+        if self.__media_sort["runtime"] is False:
+            self.__media_sort["runtime"] = None
+        else:
+            self.__media_sort["runtime"] = not self.__media_sort["runtime"]
+        self.sort_media()
+
+    def cycle_name_sort(self):
+        """Cycles the name sort to the next sorting state"""
+        if self.__media_sort["name"] is False:
+            self.__media_sort["name"] = None
+        else:
+            self.__media_sort["name"] = not self.__media_sort["name"]
+        self.sort_media()
+
     def sort_media(self):
         """Sorts the Media in the list by Type, Provider, Person, and Name"""
 
-        def sort_key(a, b):
-            """A local function meant to be used as a sorting key"""
+        def sort_key(a: Media, b: Media) -> int:
+            """A local function meant to be used to sort
+            media
+
+            :param a: A Media object to use to compare
+            :param b: A Media object to use to compare
+            """
 
             # Types are the same, move to Provider
-            if get_type(a) == get_type(b):
-
+            if get_type(a) == get_type(b) or self.get_type_sort() is None:
                 # Providers are the same, move to Person
-                if a.get_provider() == b.get_provider():
-
-                    # Persons are the same, move to name
-                    if a.get_person() == b.get_person():
-
-                        if a.get_name() == b.get_name():
-                            return 0
-                        elif a.get_name() < b.get_name():
-                            return -1
-                        return 1
-
+                if a.get_provider() == b.get_provider() or self.get_provider_sort() is None:
+                    # Persons are the same, move to Runtime
+                    if a.get_person() == b.get_person() or self.get_person_sort() is None:
+                        # Runtimes are the same, move to Name
+                        if a.get_runtime() == b.get_runtime() or self.get_runtime_sort() is None:
+                            # Names are the same, test the difference
+                            if a.get_name().lower() == b.get_name().lower() or self.get_name_sort() is None:
+                                return 0
+                            if self.get_name_sort() is not None:
+                                value = -1 if a.get_name().lower() < b.get_name().lower() else 1
+                                return value * (1 if self.get_name_sort() else -1)
+                        # Runtimes are different
+                        if self.get_runtime_sort() is not None:
+                            value = -1 if a.get_runtime() < b.get_runtime() else 1
+                            return value * (1 if self.get_runtime_sort() else -1)
                     # Persons are different
-                    elif a.get_person() < b.get_person():
-                        return -1
-                    return 1
-
+                    if self.get_person_sort() is not None:
+                        value = -1 if a.get_person() < b.get_person() else 1
+                        return value * (1 if self.get_person_sort() else -1)
                 # Providers are different
-                elif a.get_provider() < b.get_provider():
-                    return -1
-                return 1
-
+                if self.get_provider_sort() is not None:
+                    value = -1 if a.get_provider() < b.get_provider() else 1
+                    return value * (1 if self.get_provider_sort() else -1)
             # Types are different
-            elif get_type(a) < get_type(b):
-                return -1
-            return 1
+            if self.get_type_sort() is not None:
+                value = -1 if get_type(a) < get_type(b) else 1
+                return value * (1 if self.get_type_sort() else -1)
+            return -1 if a.get_id() < b.get_id() else 1
 
         self.__media = sorted(self.__media, key=cmp_to_key(sort_key))
 
