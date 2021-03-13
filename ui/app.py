@@ -1,9 +1,10 @@
 import sys
+from pathlib import Path
+
 from PyQt5 import QtWidgets, QtGui
 
 from ui import Home, TVShowView, PodcastView, LimitedSeriesView
 from ui import AppMenuBar
-
 from util import resource_path
 from options import options
 
@@ -55,8 +56,8 @@ class MediaQueue(QtWidgets.QApplication):
         self.center()
 
         if options.get_base_dir() is None:
-            filedir = QtWidgets.QFileDialog.getExistingDirectory(self.window, "Choose a Directory")
-            options.set_base_dir(filedir)
+            options.set_base_dir(QtWidgets.QFileDialog.getExistingDirectory(
+                self.window, "Choose a Directory", str(Path.home())))
         sys.exit(self.exec_())
 
     def center(self):

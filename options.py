@@ -1,5 +1,6 @@
 import os
 from json import dump, load
+from pathlib import Path
 from typing import List
 
 
@@ -29,8 +30,8 @@ class MediaQueueOptions:
         self.__base_dir = None
 
         # Check if the options file exists
-        if not os.path.exists("./options.json"):
-            with open("./options.json", "w") as options_file:
+        if not os.path.exists(f"{Path.home()}/options.json"):
+            with open(f"{Path.home()}/options.json", "w") as options_file:
                 dump({
                     "providers": [],
                     "persons": [],
@@ -38,7 +39,7 @@ class MediaQueueOptions:
                 }, options_file, indent=4)
 
         # Load the file
-        with open("./options.json", "r") as options_file:
+        with open(f"{Path.home()}/options.json", "r") as options_file:
             options_json = load(options_file)
             self.__providers = options_json["providers"]
             self.__persons = options_json["persons"]
@@ -121,7 +122,7 @@ class MediaQueueOptions:
 
     def save(self):
         """Saves the options into the json file"""
-        with open("data/options.json", "w") as options_file:
+        with open(f"{Path.home()}/options.json", "w") as options_file:
             dump({
                 "providers": self.__providers,
                 "persons": self.__persons,
