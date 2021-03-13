@@ -2,7 +2,7 @@ from functools import partial
 from PyQt5 import QtWidgets, QtCore
 
 from ui import add_grid_to_layout
-from util import options
+from options import options
 
 
 class PersonListScrollArea(QtWidgets.QScrollArea):
