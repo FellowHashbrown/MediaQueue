@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python3.8 -m PyInstaller --windowed --onefile main.spec
-create-dmg 'dist/MediaQueue.app'
+python3.8 setup.py py2app
+create-dmg --app-drop-link 100 15 'MediaQueue.dmg' 'dist/MediaQueue.app'
 rm -rf ./build ./dist
