@@ -3,6 +3,7 @@ from json import dump
 from typing import List
 
 from media import Episode, Show
+from options import options
 
 
 class LimitedSeries(Show):
@@ -73,7 +74,9 @@ class LimitedSeries(Show):
 
     def save(self):
         """Saves this LimitedSeries object into a JSON file"""
-        if not os.path.exists(f"./data/{LimitedSeries.FOLDER}"):
-            os.mkdir(f"./data/{LimitedSeries.FOLDER}")
-        with open("./data/{}/{}.json".format(LimitedSeries.FOLDER, self.get_id()), "w") as jsonfile:
+        if not os.path.exists(f"{options.get_base_dir()}/data"):
+            os.mkdir(f"{options.get_base_dir()}/data")
+        if not os.path.exists(f"{options.get_base_dir()}/data/{LimitedSeries.FOLDER}"):
+            os.mkdir(f"{options.get_base_dir()}/data/{LimitedSeries.FOLDER}")
+        with open("{}/data/{}/{}.json".format(options.get_base_dir(), LimitedSeries.FOLDER, self.get_id()), "w") as jsonfile:
             dump(self.to_json(), jsonfile, indent=4)
