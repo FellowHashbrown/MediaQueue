@@ -6,6 +6,8 @@ from typing import List, Union
 
 from media import Media, Movie, TVShow, Podcast, LimitedSeries
 
+from options import options
+
 EXPORTS = "exports"
 
 
@@ -40,8 +42,8 @@ def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
     """
 
     # Create the exports folder if necessary
-    if not os.path.exists(EXPORTS):
-        os.mkdir(EXPORTS)
+    if not os.path.exists(f"{options.get_base_dir()}/{EXPORTS}"):
+        os.mkdir(f"{options.get_base_dir()}/{EXPORTS}")
 
     # Get the filename
     now = datetime.now()
@@ -57,7 +59,7 @@ def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
             csv_object = "\n".join(m.to_csv() for m in media)
         else:
             csv_object = media.to_csv()
-        with open(f"./exports/{file_location}.csv", "w") as csv_file:
+        with open(f"{options.get_base_dir()}/exports/{file_location}.csv", "w") as csv_file:
             csv_file.write(csv_object)
 
     # Export media as JSON
@@ -68,7 +70,7 @@ def __media_to(media: Union[List[Media], Movie, LimitedSeries, Podcast, TVShow],
                 json_object.append(m.to_json())
         else:
             json_object = media.to_json()
-        with open(f"./exports/{file_location}.json", "w") as json_file:
+        with open(f"{options.get_base_dir()}/exports/{file_location}.json", "w") as json_file:
             json_file.write(dumps(json_object, indent=4))
 
 
