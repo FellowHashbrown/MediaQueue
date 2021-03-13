@@ -274,8 +274,8 @@ class MediaObjects:
             self.__filtered_media.append(medium)
 
     # noinspection PyTypeChecker
-    def set_media_sort(self, *, media_type: bool = True, provider: bool = True,
-                       person: bool = True, runtime: bool = True, name: bool = True):
+    def set_media_sort(self, *, media_type: bool = None, provider: bool = None,
+                       person: bool = None, runtime: bool = None, name: bool = None):
         """Sets the sorts for the Media on the Home screen
 
         The possible values are:
