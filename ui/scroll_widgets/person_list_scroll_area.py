@@ -44,7 +44,11 @@ class PersonListScrollArea(QtWidgets.QScrollArea):
 
             remove_button = QtWidgets.QPushButton("Remove", self.widget)
             remove_button.clicked.connect(partial(self.remove_person_func, i))
-            remove_button.setToolTip(f"Remove {person} from the people list")
+            remove_button.setToolTip(f"Remove {person} from the people list"
+                                     if i < len(persons) - 1 else
+                                     f"You can't remove {person} from the people list")
+
+            remove_button.setEnabled(i < len(persons) - 1)
 
             self.widgets.append([person_label, remove_button])
         add_grid_to_layout(self.widgets, layout)

@@ -44,7 +44,11 @@ class ProviderListScrollArea(QtWidgets.QScrollArea):
 
             remove_button = QtWidgets.QPushButton("Remove", self.widget)
             remove_button.clicked.connect(partial(self.remove_provider_func, i))
-            remove_button.setToolTip(f"Remove {provider} from the provider list")
+            remove_button.setToolTip(f"Remove {provider} from the provider list"
+                                     if i < len(providers) - 2 else
+                                     f"You can't remove {provider} from the provider list")
+
+            remove_button.setEnabled(i < len(providers) - 2)
 
             self.widgets.append([provider_label, remove_button])
         add_grid_to_layout(self.widgets, layout)
