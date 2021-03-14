@@ -1,11 +1,13 @@
 import os
-from enum import Enum
+import webbrowser
 from functools import partial
+
 from PyQt5 import QtWidgets
 
 from ui import media_objects, MessageBox
 from ui import ProviderDialog, PersonDialog
 from util import json_to_media, csv_to_media, media_to_json, media_to_csv
+from options import options
 
 
 class AppMenuBar(QtWidgets.QMenuBar):
@@ -49,6 +51,7 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
 
         self.help_menu = self.addMenu("Help")
+        self.help_menu.addAction(" How to Use", lambda: webbrowser.open("https://github.com/FellowHashbrown/MediaQueue/blob/master/README.md"))
         self.help_menu.addAction(" Report Bug or Request Feature", self.show_report_bug)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -86,8 +89,8 @@ class AppMenuBar(QtWidgets.QMenuBar):
         :param as_file: The file type to export the media as
         :param single: Whether or not to export a single piece of Media
         """
-        if not os.path.exists("exports"):
-            os.mkdir("exports")
+        if not os.path.exists(f"{options.get_base_dir()}/exports"):
+            os.mkdir(f"{options.get_base_dir()}/exports")
         try:
             media = media_objects.get_media()
             if single:
