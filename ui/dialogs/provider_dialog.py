@@ -15,6 +15,8 @@ class ProviderDialog(QtWidgets.QDialog):
                  *, update_func: callable = None):
         super().__init__(parent)
         self.update_func = update_func
+        avail_geo = QtWidgets.QDesktopWidget().availableGeometry()
+        center = avail_geo.center()
 
         layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignHCenter)
@@ -29,6 +31,11 @@ class ProviderDialog(QtWidgets.QDialog):
         layout.addWidget(self.add_button)
 
         self.setLayout(layout)
+
+        self.setGeometry((center.x() - (2 * avail_geo.width() // 5) // 2),
+                         (center.y() - (2 * avail_geo.height() // 5) // 2),
+                         2 * avail_geo.width() // 5,
+                         2 * avail_geo.height() // 5)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
