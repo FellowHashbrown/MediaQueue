@@ -19,15 +19,6 @@ if sys.platform == "darwin":
                 iconfile="mediaqueue.icns")),
         setup_requires=["py2app"])
 
-elif sys.platform == "win32":
-    extra_options = dict(
-        app=[main_script],
-        zipfile=None,
-        options=dict(
-            py2exe=dict(
-                bundle_files=1,
-                iconfile="mediaqueue.ico")),
-        setup_requires=["py2exe"])
 else:
     extra_options = dict(scripts=[main_script])
 
