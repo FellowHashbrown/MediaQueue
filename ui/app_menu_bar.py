@@ -77,11 +77,13 @@ class AppMenuBar(QtWidgets.QMenuBar):
                 media_objects.get_media().extend(media)
                 self.update_media_func()
                 MessageBox("Import Success",
-                           "Successfully imported media from the selected file(s)")
+                           "Successfully imported media from the selected file(s)",
+                           self)
         except Exception as e:
             e = str(e)
             MessageBox("Import Failure",
-                       f"The import failed because: \"{e}\"")
+                       f"The import failed because: \"{e}\"",
+                       self)
 
     def export_media(self, as_file: str, single: False):
         """Exports all Media into the specified filetype
@@ -117,11 +119,13 @@ class AppMenuBar(QtWidgets.QMenuBar):
             MessageBox("Export Success",
                        "Successfully exported {} as {}".format(
                            "all media" if not single else f"\"{media.get_name()}\"",
-                           as_file))
+                           as_file),
+                       self)
         except Exception as e:
             e = str(e)
             MessageBox("Export Failure",
-                       f"The export failed because: \"{e}\"")
+                       f"The export failed because: \"{e}\"",
+                       self)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -139,5 +143,6 @@ class AppMenuBar(QtWidgets.QMenuBar):
         """Shows the user a dialog on how to report a bug in Media Queue"""
         MessageBox("How to Report a Bug",
                    "In order to report a bug, I ask that you go here to do so",
+                   self,
                    link_title="Github Bug Reporter",
                    link_url="https://github.com/FellowHashbrown/MediaQueue/issues/new/choose")

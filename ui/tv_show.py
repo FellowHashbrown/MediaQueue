@@ -213,7 +213,8 @@ class TVShowView(QtWidgets.QFrame):
         except ValueError:
             MessageBox(
                 "Missing Values",
-                "You must specify the Name, the Streaming Provider and the Person")
+                "You must specify the Name, the Streaming Provider and the Person",
+                self)
 
     def edit(self, callback: callable = None, index: int = None):
         """Sets whether the user is editing or adding a TV Show in this view
