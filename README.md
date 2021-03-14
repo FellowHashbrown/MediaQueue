@@ -1,11 +1,10 @@
 # Media Queue
-___
 The Media Queue app lets you view, add, or modify any Movies, TV Shows, Podcasts,
 or Limited Series you are watching, have already watched, or have yet to watch.
 
 It acts as a sort of "wish list" for anything you want to watch on any Streaming Provider
 that you may choose. The details of that will be explained below.
-___
+
 ## Using The Media Queue
 
 ### Configuring Streaming Providers and People
@@ -21,7 +20,8 @@ You can also use a shortcut `Ctrl+1` for Streaming Providers, `Ctrl+2` for Peopl
 
 ### The Home Screen
 On the Home Screen, like shown below, there are a lot of things to take in.
-![Home Screen](./help/screenshots/MQ_Home.png)
+![Home Screen MacOS](./help/screenshots/macos/MQ_Home.png)
+![Home Screen Win32](./help/screenshots/win32/MQ_Home.png)
 
 #### Filters & Searching
 As you can see in the image above, there are filter dropdown boxes, so you can easily filter
@@ -33,7 +33,8 @@ You can also search for something specific in the list, and the results will app
 
 ### Adding or Editing a Movie
 By clicking on the Add Movie button, you can easily add a Movie to the media list.
-![Add Movie Screen](./help/screenshots/MQ_Add_Movie.png)
+![Add Movie Screen MacOS](./help/screenshots/macos/MQ_Add_Movie.png)
+![Add Movie Screen Win32](./help/screenshots/win32/MQ_Add_Movie.png)
 
 As you can see above, the simple fields of Name, Runtime (hours and minutes), the Streaming Provider, 
 and the Person will be required to be specified.
@@ -47,7 +48,8 @@ and editing the data from there. All the data from the Movie is loaded into the 
 
 ### Adding or Editing a TV Show
 By clicking on the Add TV Show button, you can easily add a TV Show to the Media Queue.
-![Add TV Show](./help/screenshots/MQ_Add_TV_Show.png)
+![Add TV Show MacOS](./help/screenshots/macos/MQ_Add_TV_Show.png)
+![Add TV Show Win32](./help/screenshots/win32/MQ_Add_TV_Show.png)
 
 Whenever you add a TV Show, you don't necessarily have to specify any Episodes yet.
 All you need to do is give it a name, and you can add it directly to your Media Queue
@@ -56,7 +58,8 @@ Editing a TV Show is simply done by clicking on the name of an existing TV Show 
 and editing the data from there. All the data from the TV Show is loaded into the dialog when that happens.
 
 #### Adding or Editing an Episode in a TV Show
-![Add Episode TV Show](./help/screenshots/MQ_Add_Episode_TV_Show.png)
+![Add Episode TV Show MacOS](./help/screenshots/macos/MQ_Add_Episode_TV_Show.png)
+![Add Episode TV Show Win32](./help/screenshots/win32/MQ_Add_Episode_TV_Show.png)
 When adding, or editing, an Episode that exists in a TV Show, there exists a Season number box,
 an Episode number box, the entry to type the name of the Episode, how long the Episode is (in minutes),
 and whether you've watched it in its entirety.
@@ -66,7 +69,8 @@ Note that this differs from Podcasts and Limited Series, as will be explained be
 ### Adding or Editing a Podcast
 By clicking on the Add Podcast button, you can easily add a Podcast you may be listening to
 in your free time.
-![Add Podcast](./help/screenshots/MQ_Add_Podcast.png)
+![Add Podcast MacOS](./help/screenshots/macos/MQ_Add_Podcast.png)
+![Add Podcast Win32](./help/screenshots/win32/MQ_Add_Podcast.png)
 
 The details of a Podcast are virtually the same as that of a TV Show apart from the fact that
 Episodes are separated by what year they were released versus them being part of a Season, like a TV Show is.
@@ -75,13 +79,15 @@ Editing a Podcast is simply done by clicking on the name of an existing Podcast 
 and editing the data from there. All the data from the Podcast is loaded into the dialog when that happens.
 
 #### Adding or Editing an Episode in a Podcast
-![Add Episode Podcast](./help/screenshots/MQ_Add_Episode_Podcast.png)
+![Add Episode Podcast MacOS](./help/screenshots/macos/MQ_Add_Episode_Podcast.png)
+![Add Episode Podcast Win32](./help/screenshots/win32/MQ_Add_Episode_Podcast.png)
 When adding, or editing, an Episode in a Podcast, note that instead of the Season option
 like shown in the TV Show, there is a Year option which has a super low setting of 1900, just to be safe.
 
 ### Adding or Editing a Limited Series
 By clicking on the Add Limited Series button, you can add a Limited Series to your Media Queue too!
-![Add Limited Series](./help/screenshots/MQ_Add_Limited_Series.png)
+![Add Limited Series MacOS](./help/screenshots/macos/MQ_Add_Limited_Series.png)
+![Add Limited Series Win32](./help/screenshots/win32/MQ_Add_Limited_Series.png)
 
 As with the TV Show and Podcast options, the Limited Series has virtually the same exact data except
 a Limited Series lacks the idea of Seasons. In the Limited Series' case, there are only Episodes that exist.
@@ -90,7 +96,8 @@ Editing a Limited Series is simply done by clicking on the name of an existing L
 and editing the data from there. All the data from the Limited Series is loaded into the dialog when that happens.
 
 #### Adding or Editing an Episode in a Limited Series
-![Add Episode Limited Series](./help/screenshots/MQ_Add_Episode_Limited_Series.png)
+![Add Episode Limited Series MacOS](./help/screenshots/macos/MQ_Add_Episode_Limited_Series.png)
+![Add Episode Limited Series Win32](./help/screenshots/win32/MQ_Add_Episode_Limited_Series.png)
 As you can see, the Season option is entirely removed from the dialog to add a new Episode into a Limited Series.
 This is on purpose due to what I said above, that a Limited Series doesn't technically have Seasons.
 
