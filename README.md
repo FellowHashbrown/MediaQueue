@@ -8,12 +8,26 @@ that you may choose. The details of that will be explained below.
 ## Using The Media Queue
 
 ### Configuring Streaming Providers and People
+You can find the option to configure these in the menu bar underneath `Options` (or simply use the keyboard shortcut):
+> * *Streaming Providers*
+   >  * **MacOS**: `Cmd`+`1`
+   >  * **Windows**: `Ctrl`+`1`
+> * *Person*
+   >  * **MacOS**: `Cmd`+`2`
+   >  * **Windows**: `Ctrl`+`2`
+
 The Media Queue comes with 2 default Streaming Providers:
  * **Default**: *This is in case you don't know the Streaming Provider yet*
  * **Unavailable**: *This is whenever something you want to watch isn't available on anything you subscribe to or have yet*
 
+![Streaming Provider Options MacOS](./help/screenshots/macos/MQ_Streaming_Provider_Options.png)
+![Streaming Provider Options Win32](./help/screenshots/win32/MQ_Streaming_Provider_Options.png)
+
 It also comes with 1 default person:
  * **Default**: *This is in case you only keep track of yourself and not other people*
+
+![Person Options MacOS](./help/screenshots/macos/MQ_Person_Options.png)
+![Person Options Win32](./help/screenshots/win32/MQ_Person_Options.png)
 
 Using the menu bar, underneath the `Options` menu, you can configure both of these.
 You can also use a shortcut `Ctrl+1` for Streaming Providers, `Ctrl+2` for People.
@@ -26,7 +40,7 @@ On the Home Screen, like shown below, there are a lot of things to take in.
 #### Filters & Searching
 As you can see in the image above, there are filter dropdown boxes, so you can easily filter
 by media type (like Movies, TVShows, etc.), by Streaming Provider, by Person, and by its started/finished status.
-* Note: Every time you add a new Streaming Provider or Person, that option immediately becomes
+> Note: Every time you add a new Streaming Provider or Person, that option immediately becomes
 available in the filter dropdown boxes.
 
 You can also search for something specific in the list, and the results will appear as you type.
@@ -106,12 +120,12 @@ ___
 With the Media Queue, you can easily import and export any files from in a JSON or CSV format
 that exists with media that a friend, or other people who use this, have put out there in order to 
 make it easier to create instances for TV Shows that you watch that others may also watch.
- * Don't even get me started on *Supernatural* and its **_15_** Seasons
+ > Don't even get me started on *Supernatural* and its **_15_** Seasons
 
 ### To/From JSON
 To import something from JSON, you can go to the menu bar and select `File` > `Import Media` > `From JSON` (or simply use the keyboard shortcut):
-* **MacOS**: `Cmd`+`O` (as in the letter O)
-* **Windows**: `Ctrl`+`O` (as in the letter O)
+> **MacOS**: `Cmd`+`O` (as in the letter O) \
+> **Windows**: `Ctrl`+`O` (as in the letter O)
 
 From there, you can select which JSON files you want to import.
 
@@ -132,30 +146,30 @@ where the type of Media is specified in its own key.
 
 #### Exporting All Media
 To export all your Media into a single JSON file, you simply select `File` > `Export All Media` > `To JSON` (or simply use the keyboard shortcut):
-* **MacOS**: `Option`+`S`
-* **Windows**: `Alt`+`S`
+> **MacOS**: `Option`+`S` \
+> **Windows**: `Alt`+`S`
 
 This will export all your media into a JSON file underneath a folder that is created called `exports`
 
 #### Exporting One Piece of Media
 To export a single Movie, TV Show, etc., all you have to do is select what you want to export, and, in the menu bar, select
 `File` > `Export Current Media` > `To JSON` (or simply use the keyboard shortcut):
-* **MacOS**: `Cmd`+`S`
-* **Windows**: `Ctrl`+`S`
+> **MacOS**: `Cmd`+`S` \
+> **Windows**: `Ctrl`+`S`
 
 This will export that one piece of media into a JSON file, also underneath the `exports` folder
 
 ### To/From CSV
 To import something from CSV, you can go to the menu bar and select `File` > `Import Media` > `From CSV`
 (or simply use the keyboard shortcut):
-* **MacOS**: `Cmd`+`Shift`+`O` (as in the letter O)
-* **Windows**: `Ctrl`+`Shift`+`O` (as in the letter O)
+> **MacOS**: `Cmd`+`Shift`+`O` (as in the letter O) \
+> **Windows**: `Ctrl`+`Shift`+`O` (as in the letter O)
 
 From there, you can select which CSV files you want to import.
 
 The format of a CSV file, which differs from an actual CSV file used for Google Sheets, Numbers, or Microsoft Excel,
 should follow a format similar to the following:
-```sql
+```css
 Movie
 "Avengers: Endgame",182,Netflix,Default,True,False
 
@@ -169,32 +183,31 @@ LimitedSeries
 1,6,"Adjournment",60,True
 1,7,"End Game",67,True
 ```
-There are multiple things to note about the format of the CSV file:
-1. The type of Media should come before the data for the media:
-    1. `Movie`, `TVShow`, `LimitedSeries`, `Podcast` are valid types
-1. In TV Shows, Podcasts, and Limited Series', the Episodes are listed including their season number
-as a list of Episodes right below the show data (like shown with *The Queen's Gambit*)
-1. There can be blank lines in between if it helps to separate certain pieces of Media from one another or 
-when separating seasons from one another which can be especially helpful in longer running shows (like *Supernatural* or *Grey's Anatomy* which 
-   both meet or exceed 15 seasons)
-1. The only thing that *__needs__* to be in quotes is the name of the Media and the Episodes underneath (if applicable)
-    1. This is required in case any episodes have commas in them which would break the CSV format if there were no quotes
+> There are multiple things to note about the format of the CSV file:
+> 1. The type of Media should come before the data for the media:
+>    1. `Movie`, `TVShow`, `LimitedSeries`, `Podcast` are valid types
+> 1. In TV Shows, Podcasts, and Limited Series', the Episodes are listed including their season number
+> as a list of Episodes right below the show data (like shown with *The Queen's Gambit*)
+> 1. There can be blank lines in between if it helps to separate certain pieces of Media from one another or 
+> when separating seasons from one another which can be especially helpful in longer running shows (like *Supernatural* or *Grey's Anatomy* which 
+>    both meet or exceed 15 seasons)
+> 1. The only thing that *__needs__* to be in quotes is the name of the Media and the Episodes underneath (if applicable)
+>    1. This is required in case any episodes have commas in them which would break the CSV format if there were no quotes
     
 #### Exporting All Media
 To export all your Media into a single CSV file, you simply select `File` > `Export All Media` > `To CSV` (or simply use the keyboard shortcut):
-* **MacOS**: `Option`+`Shift`+`S`
-* **Windows**: `Alt`+`Shift`+`S`
+> **MacOS**: `Option`+`Shift`+`S` \
+> **Windows**: `Alt`+`Shift`+`S`
 
 This will export all your media into a CSV file underneath a folder that is created called `exports`
 
 #### Exporting One Piece of Media
 To export a single Movie, TV Show, etc., all you have to do is select what you want to export, and, in the menu bar, select
 `File` > `Export Current Media` > `To CSV` (or simply use the keyboard shortcut):
-* **MacOS**: `Cmd`+`Shift`+`S`
-* **Windows**: `Ctrl`+`Shift`+`S`
+> **MacOS**: `Cmd`+`Shift`+`S` \
+> **Windows**: `Ctrl`+`Shift`+`S`
 
 This will export that one piece of media into a CSV file, also underneath the `exports` folder
-___
 ## Feedback
 
 ### Reporting Bugs & Requesting Features
