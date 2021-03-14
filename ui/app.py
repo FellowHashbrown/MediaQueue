@@ -41,7 +41,7 @@ class MediaQueue(QtWidgets.QApplication):
         }, self.widget)
 
         # Setup the Menu Bar for loading data into the Media Queue
-        self.window.setMenuBar(AppMenuBar(self.widget,
+        self.window.setMenuBar(AppMenuBar(self.window,
                                           update_media_func=self.update_media,
                                           update_providers_func=self.update_providers,
                                           update_persons_func=self.update_persons))
