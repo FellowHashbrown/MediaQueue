@@ -1,7 +1,7 @@
 IF EXIST "MediaQueue.exe" (
     DEL "MediaQueue.exe"
 )
-python3.8 setup.py py2exe
+PyInstaller --windowed --onefile -n "MediaQueue" -i "mediaqueue.ico" --add-data "mediaqueue.ico;." MediaQueue.py
 MOVE /y .\dist\MediaQueue.exe .\MediaQueue.exe
 RMDIR .\dist /s /q
 RMDIR .\build /s /q
