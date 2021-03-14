@@ -43,7 +43,8 @@ class ProviderDialog(QtWidgets.QDialog):
                 self.scroll_area.update_ui()
             else:
                 MessageBox("Streaming Provider Exists!",
-                           f"\"{provider}\" already exists in the app.")
+                           f"\"{provider}\" already exists in the app.",
+                           self)
 
     def remove_provider(self, index: int):
         """Removes a Streaming Provider from the provider list
@@ -59,4 +60,5 @@ class ProviderDialog(QtWidgets.QDialog):
                            "If you tried removing Default or Unavailable, you can't do that.\n" +
                            "If you were trying to remove something else, then this is a bug and you should report it!\n"+
                            "Check under the Help menu for that!"
-                       ))
+                       ),
+                       self)

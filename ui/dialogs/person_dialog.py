@@ -43,7 +43,8 @@ class PersonDialog(QtWidgets.QDialog):
                 self.scroll_area.update_ui()
             else:
                 MessageBox("Person Exists!",
-                           f"\"{person}\" already exists in the app.")
+                           f"\"{person}\" already exists in the app.",
+                           self)
 
     def remove_person(self, index: int):
         """Removes a Person from the person list
@@ -59,4 +60,5 @@ class PersonDialog(QtWidgets.QDialog):
                         "If you tried removing Default, you can't do that.\n" +
                         "If you were trying to remove something else, then this is a bug and you should report it!\n" +
                         "Check under the Help menu for that!"
-                       ))
+                       ),
+                       self)
