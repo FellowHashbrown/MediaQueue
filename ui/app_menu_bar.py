@@ -50,8 +50,10 @@ class AppMenuBar(QtWidgets.QMenuBar):
         self.options_menu.addAction(" Configure Streaming Providers", self.configure_providers, "Ctrl+1")
         self.options_menu.addAction(" Configure Persons", self.configure_persons, "Ctrl+2")
 
+        def open_browser():
+            webbrowser.open("https://github.com/FellowHashbrown/MediaQueue/blob/master/README.md")
         self.help_menu = self.addMenu("Help")
-        self.help_menu.addAction(" How to Use", lambda: webbrowser.open("https://github.com/FellowHashbrown/MediaQueue/blob/master/README.md"))
+        self.help_menu.addAction(" How to Use", open_browser)
         self.help_menu.addAction(" Report Bug or Request Feature", self.show_report_bug)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
