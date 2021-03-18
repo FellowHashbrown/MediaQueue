@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 from media import Movie, TVShow, Podcast, LimitedSeries
 from media.util import get_type
 from ui import MovieDialog, MediaListWidget, add_grid_to_layout, media_objects
+from ui import MessageBox
 from options import options
 
 
@@ -36,14 +37,19 @@ class Home(QtWidgets.QFrame):
         for path in paths:
             if os.path.exists(f"{options.get_base_dir()}/data/{path}"):
                 for file in os.listdir(f"{options.get_base_dir()}/data/{path}"):
-                    if path == Movie.FOLDER and file.endswith(".json"):
-                        media.append(Movie(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
-                    elif path == TVShow.FOLDER and file.endswith(".json"):
-                        media.append(TVShow(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
-                    elif path == Podcast.FOLDER and file.endswith(".json"):
-                        media.append(Podcast(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
-                    elif path == LimitedSeries.FOLDER and file.endswith(".json"):
-                        media.append(LimitedSeries(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
+                    try:
+                        if path == Movie.FOLDER and file.endswith(".json"):
+                            media.append(Movie(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
+                        elif path == TVShow.FOLDER and file.endswith(".json"):
+                            media.append(TVShow(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
+                        elif path == Podcast.FOLDER and file.endswith(".json"):
+                            media.append(Podcast(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
+                        elif path == LimitedSeries.FOLDER and file.endswith(".json"):
+                            media.append(LimitedSeries(filename=f"{options.get_base_dir()}/data/{path}/{file}"))
+                    except Exception as e:
+                        MessageBox(f"Error loading {file}",
+                                   str(e),
+                                   self)
         media_objects.set_media(media)
 
         # Setup the MediaListWidget and the attributes for the filter comboboxes
