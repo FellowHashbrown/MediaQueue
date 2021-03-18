@@ -4,6 +4,6 @@ if [ -f "MediaQueue.dmg" ]
 then
   rm "MediaQueue.dmg"
 fi
-python3.8 setup.py py2app
+python3.8 macSetup.py py2app
 create-dmg dist/MediaQueue.app
 rm -rf ./build ./dist
