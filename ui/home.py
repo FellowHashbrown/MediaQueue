@@ -307,7 +307,7 @@ class Home(QtWidgets.QFrame):
                 ("▼" if media_objects.get_type_sort() is False else "")))
         elif sort == "provider":
             media_objects.cycle_provider_sort()
-            self.sort_provider_button.setText("Sort By Provider {}".format(
+            self.sort_provider_button.setText("Sort By Streaming Provider {}".format(
                 "▲" if media_objects.get_provider_sort() else
                 ("▼" if media_objects.get_provider_sort() is False else "")))
         elif sort == "person":
