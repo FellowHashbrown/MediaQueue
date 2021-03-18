@@ -4,7 +4,7 @@ from pathlib import Path
 from PyQt5 import QtWidgets, QtGui
 
 from ui import Home, TVShowView, PodcastView, LimitedSeriesView
-from ui import AppMenuBar
+from ui import AppMenuBar, MessageBox
 from util import resource_path
 from options import options
 
@@ -23,8 +23,8 @@ class MediaQueue(QtWidgets.QApplication):
         # Set up the Main Window
         self.window = QtWidgets.QMainWindow()
         self.window.setWindowTitle("Media Queue")
-        self.window.setWindowIcon(QtGui.QIcon(resource_path(
-            "mediaqueue.ico" if sys.platform != "darwin" else "mediaqueue.icns")))
+        if sys.platform == "win32":
+            self.window.setWindowIcon(QtGui.QIcon(resource_path("mediaqueue.ico")))
 
         # Set up the layout
         self.widget = QtWidgets.QStackedWidget(self.window)
@@ -56,6 +56,9 @@ class MediaQueue(QtWidgets.QApplication):
         self.center()
 
         if options.get_base_dir() is None:
+            MessageBox("First Startup",
+                       "In the next dialog, choose a folder for your Media Queue stuff to be saved to",
+                       self.window)
             options.set_base_dir(QtWidgets.QFileDialog.getExistingDirectory(
                 self.window, "Choose a Directory", str(Path.home())))
         sys.exit(self.exec_())
