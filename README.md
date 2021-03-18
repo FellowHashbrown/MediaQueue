@@ -10,11 +10,11 @@ that you may choose. The details of that will be explained below.
 ### Configuring Streaming Providers and People
 You can find the option to configure these in the menu bar underneath `Options` (or simply use the keyboard shortcut):
 > * *Streaming Providers*
-   >  * **MacOS**: `Cmd`+`1`
-   >  * **Windows**: `Ctrl`+`1`
+>   * **MacOS**: `Cmd`+`1`
+>   * **Windows**: `Ctrl`+`1`
 > * *Person*
-   >  * **MacOS**: `Cmd`+`2`
-   >  * **Windows**: `Ctrl`+`2`
+>   * **MacOS**: `Cmd`+`2`
+>   * **Windows**: `Ctrl`+`2`
 
 The Media Queue comes with 2 default Streaming Providers:
  * **Default**: *This is in case you don't know the Streaming Provider yet*
@@ -38,6 +38,7 @@ On the Home Screen, like shown below, there are a lot of things to take in.
 ![Home Screen Win32](./help/screenshots/win32/MQ_Home.png)
 
 #### Filters & Searching
+
 As you can see in the image above, there are filter dropdown boxes, so you can easily filter
 by media type (like Movies, TVShows, etc.), by Streaming Provider, by Person, and by its started/finished status.
 > Note: Every time you add a new Streaming Provider or Person, that option immediately becomes
@@ -74,6 +75,7 @@ and editing the data from there. All the data from the TV Show is loaded into th
 #### Adding or Editing an Episode in a TV Show
 ![Add Episode TV Show MacOS](./help/screenshots/macos/MQ_Add_Episode_TV_Show.png)
 ![Add Episode TV Show Win32](./help/screenshots/win32/MQ_Add_Episode_TV_Show.png)
+
 When adding, or editing, an Episode that exists in a TV Show, there exists a Season number box,
 an Episode number box, the entry to type the name of the Episode, how long the Episode is (in minutes),
 and whether you've watched it in its entirety.
@@ -95,6 +97,7 @@ and editing the data from there. All the data from the Podcast is loaded into th
 #### Adding or Editing an Episode in a Podcast
 ![Add Episode Podcast MacOS](./help/screenshots/macos/MQ_Add_Episode_Podcast.png)
 ![Add Episode Podcast Win32](./help/screenshots/win32/MQ_Add_Episode_Podcast.png)
+
 When adding, or editing, an Episode in a Podcast, note that instead of the Season option
 like shown in the TV Show, there is a Year option which has a super low setting of 1900, just to be safe.
 
@@ -112,6 +115,7 @@ and editing the data from there. All the data from the Limited Series is loaded 
 #### Adding or Editing an Episode in a Limited Series
 ![Add Episode Limited Series MacOS](./help/screenshots/macos/MQ_Add_Episode_Limited_Series.png)
 ![Add Episode Limited Series Win32](./help/screenshots/win32/MQ_Add_Episode_Limited_Series.png)
+
 As you can see, the Season option is entirely removed from the dialog to add a new Episode into a Limited Series.
 This is on purpose due to what I said above, that a Limited Series doesn't technically have Seasons.
 
