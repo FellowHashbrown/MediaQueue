@@ -242,6 +242,7 @@ class TVShowView(QtWidgets.QFrame):
             self.finish_checkbox.setChecked(tv_show.is_finished())
             self.episodes_widget.scroll_area.update_ui()
             self.episodes_widget.update_filter_options()
+            self.episodes_widget.update_stats()
         else:
             self.window().setWindowTitle("Add TV Show")
 
