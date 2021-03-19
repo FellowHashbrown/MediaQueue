@@ -5,6 +5,8 @@ or Limited Series you are watching, have already watched, or have yet to watch.
 It acts as a sort of "wish list" for anything you want to watch on any Streaming Provider
 that you may choose. The details of that will be explained below.
 
+Discord Support Server: [![Discord Img](https://img.shields.io/discord/822268797963599943?color=ec7600&label=Support%20Server)](https://discord.gg/mmdY6etBPz)
+
 ## Using The Media Queue
 
 ### Configuring Streaming Providers and People
