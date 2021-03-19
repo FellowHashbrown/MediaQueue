@@ -31,6 +31,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
         self.scroll_area = EpisodeListScrollArea(
             self, edit_episode_func=edit_episode_func,
             remove_episode_func=remove_episode_func,
+            update_season_func=self.update_stats,
             hide_season=hide_season)
         self.scroll_area.setAlignment(QtCore.Qt.AlignHCenter)
 

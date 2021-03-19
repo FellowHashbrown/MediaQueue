@@ -18,13 +18,14 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
 
     def __init__(self, parent: QtWidgets.QWidget = None,
                  *, edit_episode_func: callable = None, remove_episode_func: callable = None,
-                 hide_season: Union[bool, None] = False):
+                 hide_season: Union[bool, None] = False, update_season_func: callable = None):
         super().__init__(parent)
 
         # Save the parameters as attributes
         self.hide_season = hide_season
         self.edit_episode_func = edit_episode_func
         self.remove_episode_func = remove_episode_func
+        self.update_season_func = update_season_func
 
         # Create the widget attributes for inside the scroll area
         self.widget = None
@@ -118,6 +119,7 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         #   due to the column headings
         watched = self.widgets[index + 1][0].isChecked()
         media_objects.get_episodes()[index].set_watched(watched)
+        self.update_season_func()
         self.filter()
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
