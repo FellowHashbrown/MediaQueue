@@ -39,6 +39,12 @@ class EpisodeListWidget(QtWidgets.QWidget):
         self.add_episode_button = None
         self.filter_options = None
 
+        # Create the widget attributes for the count and runtime stats
+        self.percent_watched_label = None
+        self.percent_unwatched_label = None
+        self.count_label = None
+        self.runtime_label = None
+
         self.setup_ui()
 
     def setup_ui(self):
@@ -61,10 +67,17 @@ class EpisodeListWidget(QtWidgets.QWidget):
                 watched = False
             media_objects.set_episode_filters(season=season, watched=watched)
             self.scroll_area.filter()
+            self.update_stats()
 
         # Sets the layout for the widget, create the combo boxes
         #   and adds the child widgets to this widget
         layout = QtWidgets.QGridLayout()
+
+        self.percent_watched_label = QtWidgets.QLabel(self)
+        self.percent_unwatched_label = QtWidgets.QLabel(self)
+        self.count_label = QtWidgets.QLabel(self)
+        self.runtime_label = QtWidgets.QLabel(self)
+        self.update_stats()
 
         self.filter_combobox = QtWidgets.QComboBox(self)
         self.filter_combobox.currentIndexChanged.connect(filter_function)
@@ -73,11 +86,58 @@ class EpisodeListWidget(QtWidgets.QWidget):
         self.add_episode_button = QtWidgets.QPushButton("Add Episode", self)
         self.add_episode_button.clicked.connect(partial(self.edit_episode_func, None))
 
-        layout.addWidget(self.filter_combobox, 0, 0, 1, 2)
-        layout.addWidget(self.add_episode_button, 0, 2)
-        layout.addWidget(self.scroll_area, 1, 0, 3, 3)
+        layout.addWidget(self.filter_combobox, 0, 0, 1, 3)
+        layout.addWidget(self.add_episode_button, 0, 3)
+        layout.addWidget(self.scroll_area, 1, 0, 3, 4)
+        layout.addWidget(self.percent_watched_label, 5, 0)
+        layout.addWidget(self.percent_unwatched_label, 5, 1)
+        layout.addWidget(self.runtime_label, 5, 2)
+        layout.addWidget(self.count_label, 5, 3)
 
         self.setLayout(layout)
+
+    def update_stats(self):
+        """Updates the stats at the bottom of the widget
+        for how many Episodes show up and the total runtime
+        """
+        total_episodes = len(media_objects.get_filtered_episodes())
+        watched_episodes = len([
+            episode
+            for episode in media_objects.get_filtered_episodes()
+            if episode.is_watched()
+        ])
+        unwatched_episodes = len([
+            episode
+            for episode in media_objects.get_filtered_episodes()
+            if not episode.is_watched()
+        ])
+        weeks, days = divmod(sum([
+            episode.get_runtime()
+            for episode in media_objects.get_filtered_episodes()
+        ]), 7 * 24 * 60)
+        days, hours = divmod(days, 24 * 60)
+        hours, minutes = divmod(hours, 60)
+        runtime_stats = {
+            "wks": weeks, "days": days,
+            "hours": hours, "mins": minutes
+        }
+        runtime_text = " ".join([
+            f"{runtime_stats[stat]}{stat[:-1]}"
+            if runtime_stats[stat] == 1
+            else f"{runtime_stats[stat]}{stat}"
+            for stat in runtime_stats
+            if runtime_stats[stat] > 0
+        ])
+
+        self.percent_watched_label.setText("{}% Watched".format(
+            round(watched_episodes / total_episodes * 100, 2)
+            if total_episodes != 0 else 0))
+        self.percent_unwatched_label.setText("{}% Unwatched".format(
+            round(unwatched_episodes / total_episodes * 100, 2)
+            if total_episodes != 0 else 0))
+        self.runtime_label.setText(f"Runtime: {runtime_text}")
+        self.count_label.setText("Count: {}".format(
+            len(media_objects.get_filtered_episodes())))
 
     def update_filter_options(self):
         """Updates the filter options based off the episodes in the widget"""
