@@ -244,6 +244,7 @@ class PodcastView(QtWidgets.QFrame):
             self.finish_checkbox.setChecked(podcast.is_finished())
             self.episodes_widget.scroll_area.update_ui()
             self.episodes_widget.update_filter_options()
+            self.episodes_widget.update_stats()
         else:
             self.window().setWindowTitle("Add Podcast")
 
