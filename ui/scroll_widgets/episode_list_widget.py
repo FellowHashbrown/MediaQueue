@@ -89,7 +89,7 @@ class EpisodeListWidget(QtWidgets.QWidget):
 
         layout.addWidget(self.filter_combobox, 0, 0, 1, 3)
         layout.addWidget(self.add_episode_button, 0, 3)
-        layout.addWidget(self.scroll_area, 1, 0, 3, 4)
+        layout.addWidget(self.scroll_area, 1, 0, 1, 4)
         layout.addWidget(self.percent_watched_label, 5, 0)
         layout.addWidget(self.percent_unwatched_label, 5, 1)
         layout.addWidget(self.runtime_label, 5, 2)
