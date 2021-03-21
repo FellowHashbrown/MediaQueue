@@ -4,11 +4,11 @@
 <dict>
     <key>NSRequiresAquaSystemAppearance</key>
     <string>No</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.1.0</string>
-	<key>CFBundleVersion</key>
-	<string>0.1</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>© 2021, Fellow Hashbrown</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>0.1</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>© 2021, Fellow Hashbrown</string>
 </dict>
 </plist>
