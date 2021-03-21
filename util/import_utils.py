@@ -5,6 +5,7 @@ from typing import List, Union
 from uuid import uuid4
 
 from media import Movie, LimitedSeries, Podcast, TVShow, Season, Episode
+from options import options
 
 
 def json_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSeries, Podcast, TVShow]]:
@@ -44,6 +45,7 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
 
     :raises FileNotFoundError: If the specified filename was not found on the system
     :raises TypeError: If the CSV file holds an unknown object type
+    :raises KeyError: If the Streaming Provider or Person given for a Media object is invalid
     """
 
     # Load the CSV file and split into lines
@@ -70,6 +72,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
 
         if media_content[0][0] == "Movie":
             name, runtime, provider, person, started, finished = media_content[1]
+            if provider not in options.get_providers():
+                raise KeyError(f"{provider} does not exist in your Streaming Providers")
+            if person not in options.get_persons():
+                raise KeyError(f"{person} does not exist in your Person list")
             media_list.append(Movie(
                 name, int(runtime),
                 provider, person,
@@ -78,6 +84,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
 
         elif media_content[0][0] == "LimitedSeries":
             name, provider, person, started, finished = media_content[1]
+            if provider not in options.get_providers():
+                raise KeyError(f"{provider} does not exist in your Streaming Providers")
+            if person not in options.get_persons():
+                raise KeyError(f"{person} does not exist in your Person list")
             episodes = []
             for episode in media_content[2:]:
                 s_num, e_num, e_name, runtime, watched = episode
@@ -93,6 +103,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
 
         elif media_content[0][0] in ["Podcast", "TVShow"]:
             name, provider, person, started, finished = media_content[1]
+            if provider not in options.get_providers():
+                raise KeyError(f"{provider} does not exist in your Streaming Providers")
+            if person not in options.get_persons():
+                raise KeyError(f"{person} does not exist in your Person list")
             seasons = {}
             for episode in media_content[2:]:
                 s_num, e_num, e_name, runtime, watched = episode
