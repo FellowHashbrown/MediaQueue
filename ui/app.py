@@ -28,7 +28,6 @@ class MediaQueue(QtWidgets.QApplication):
 
         # Set up the layout
         self.widget = QtWidgets.QStackedWidget(self.window)
-        self.widget.currentChanged.connect(self.center)
 
         # Set up the views
         self.limited_series_view = LimitedSeriesView(self.widget)
@@ -53,7 +52,6 @@ class MediaQueue(QtWidgets.QApplication):
 
         self.window.setCentralWidget(self.widget)
         self.window.show()
-        self.center()
 
         if options.get_base_dir() is None:
             MessageBox("First Startup",
@@ -62,15 +60,6 @@ class MediaQueue(QtWidgets.QApplication):
             options.set_base_dir(QtWidgets.QFileDialog.getExistingDirectory(
                 self.window, "Choose a Directory", str(Path.home())))
         sys.exit(self.exec_())
-
-    def center(self):
-        """Center the window on the screen"""
-        self.window.setGeometry(0, 0,
-                                2 * MediaQueue.RESOLUTION.width() // 3,
-                                2 * MediaQueue.RESOLUTION.height() // 3)
-        qt_rect = self.widget.currentWidget().frameGeometry()
-        qt_rect.moveCenter(MediaQueue.CENTER)
-        self.window.move(qt_rect.topLeft())
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
