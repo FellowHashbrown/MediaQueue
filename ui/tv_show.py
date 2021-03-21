@@ -46,8 +46,9 @@ class TVShowView(QtWidgets.QFrame):
             self,
             edit_episode_func=self.add_edit_episode,
             remove_episode_func=self.remove_episode)
+
         layout.addWidget(self.setup_tv_show_ui(self))
-        layout.addWidget(self.episodes_widget, 3)
+        layout.addWidget(self.episodes_widget, 1)
         layout.addWidget(self.setup_finish_buttons_ui(self))
 
         self.setLayout(layout)
@@ -66,7 +67,9 @@ class TVShowView(QtWidgets.QFrame):
         provider_label = QtWidgets.QLabel("Streaming Provider", widget)
         person_label = QtWidgets.QLabel("Person", widget)
         self.start_checkbox = QtWidgets.QCheckBox("Started?", widget)
+        self.start_checkbox.clicked.connect(self.update_start)
         self.finish_checkbox = QtWidgets.QCheckBox("Finished?", widget)
+        self.finish_checkbox.clicked.connect(self.update_finish)
         divider = QtWidgets.QFrame(widget)
         divider.setFrameShape(QtWidgets.QFrame.HLine)
         divider.setFrameShadow(QtWidgets.QFrame.Sunken)
