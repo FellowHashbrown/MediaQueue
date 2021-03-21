@@ -1,8 +1,8 @@
 #!/bin/bash
-
-if [ -f "MediaQueue.dmg" ]
+CUR_VER=$(grep -E "[0-9]+\.[0-9]+\.[0-9]+" Info.plist | sed 's/<string>//g' | sed 's/<\/string>//g' | sed -e 's/^[ \t]*//g')
+if [ -f "MediaQueue $CUR_VER.dmg" ]
 then
-  rm "MediaQueue.dmg"
+  rm "MediaQueue $CUR_VER.dmg"
 fi
 python3.8 macSetup.py py2app
 create-dmg dist/MediaQueue.app
