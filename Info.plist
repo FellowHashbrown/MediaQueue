@@ -8,7 +8,7 @@
 	<string>0.1.0</string>
 	<key>CFBundleVersion</key>
 	<string>0.1</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Copyright © Jonah Pierce</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2021, Fellow Hashbrown</string>
 </dict>
 </plist>
