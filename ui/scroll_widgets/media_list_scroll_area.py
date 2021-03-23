@@ -35,6 +35,8 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
 
     def update_ui(self):
         """Creates/updates the UI for the list of Media"""
+        value_y = self.verticalScrollBar().value()
+        value_x = self.horizontalScrollBar().value()
 
         # Setup the widgets and labels for the Scroll Area
         self.widget = QtWidgets.QWidget(self.parent())
@@ -103,6 +105,8 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
         self.setWidget(self.widget)
         self.setWidgetResizable(True)
         self.filter()
+        self.verticalScrollBar().setValue(value_y)
+        self.horizontalScrollBar().setValue(value_x)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 

@@ -38,6 +38,8 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
 
     def update_ui(self):
         """Creates/Updates the UI for the List of Episodes"""
+        value_y = self.verticalScrollBar().value()
+        value_x = self.horizontalScrollBar().value()
 
         # Setup the widgets and labels for the Scroll Area
         self.widget = QtWidgets.QWidget(self.parent())
@@ -105,6 +107,8 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         self.setWidget(self.widget)
         self.setWidgetResizable(True)
         self.filter()
+        self.verticalScrollBar().setValue(value_y)
+        self.horizontalScrollBar().setValue(value_x)
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
