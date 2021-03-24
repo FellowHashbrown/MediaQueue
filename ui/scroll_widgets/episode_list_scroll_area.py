@@ -67,6 +67,8 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
         # Sort the episodes and create the widgets for the Episodes
         media_objects.sort_episodes()
         episodes = media_objects.get_episodes()
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         for i in range(len(episodes)):
             episode = episodes[i]
 
@@ -76,7 +78,10 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
             watched_checkbox.setToolTip(f"Set the watched status of {episode.get_name()}")
 
             season_label = QtWidgets.QLabel(str(episode.get_season()), self)
-            episode_label = QtWidgets.QLabel(str(episode.get_episode()), self)
+            episode_label = QtWidgets.QLabel(str(episode.get_episode())
+                                             if self.hide_season is not None
+                                             else str("%s %s" % (months[episode.get_episode() // 1000],
+                                                                 episode.get_episode() % 1000)), self)
             runtime_label = QtWidgets.QLabel("{} min{}".format(
                 episode.get_runtime(),
                 "s" if episode.get_runtime() != 1 else ""

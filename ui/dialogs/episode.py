@@ -37,6 +37,9 @@ class EpisodeDialog(QtWidgets.QDialog):
         self.runtime_spinner = None
         self.watched_checkbox = None
 
+        self.month_combobox = None
+        self.day_spinner = None
+
         self.setup_ui()
         self.result = self.exec_()
 
@@ -70,17 +73,18 @@ class EpisodeDialog(QtWidgets.QDialog):
         layout = QtWidgets.QGridLayout()
 
         season_label = QtWidgets.QLabel("Season" if self.show_season is not None else "Year", widget)
-        episode_label = QtWidgets.QLabel("Episode", widget)
         name_label = QtWidgets.QLabel("Name", widget)
         runtime_label = QtWidgets.QLabel("Runtime (in minutes)", widget)
 
-        self.season_spinner = QtWidgets.QSpinBox(widget)
         if self.show_season is not None:
-            self.season_spinner.setRange(1, 10000)
+            episode_label = QtWidgets.QLabel("Episode", widget)
+            month_label = day_label = None
         else:
-            self.season_spinner.setRange(1900, datetime.now().year)
-        self.episode_spinner = QtWidgets.QSpinBox(widget)
-        self.episode_spinner.setRange(1, 1000)
+            month_label = QtWidgets.QLabel("Month", widget)
+            day_label = QtWidgets.QLabel("Day", widget)
+            episode_label = None
+
+        self.season_spinner = QtWidgets.QSpinBox(widget)
         self.name_line_edit = QtWidgets.QLineEdit(widget)
         self.name_line_edit.setPlaceholderText("Episode Name")
         self.name_line_edit.selectAll()
@@ -88,19 +92,51 @@ class EpisodeDialog(QtWidgets.QDialog):
         self.runtime_spinner.setRange(1, 1000)
         self.watched_checkbox = QtWidgets.QCheckBox("Watched?", widget)
 
+        if self.show_season is not None:
+            self.season_spinner.setRange(1, 10000)
+            self.episode_spinner = QtWidgets.QSpinBox(widget)
+            self.episode_spinner.setRange(1, 1000)
+        else:
+            self.season_spinner.setRange(1900, datetime.now().year)
+            self.season_spinner.setValue(datetime.now().year)
+            self.season_spinner.valueChanged.connect(self.update_podcast_widgets)
+
+            self.month_combobox = QtWidgets.QComboBox(widget)
+            self.month_combobox.addItems(["January", "February", "March", "April", "May", "June",
+                                          "July", "August", "September", "October", "November", "December"])
+            self.month_combobox.setCurrentIndex(datetime.now().month)
+            self.month_combobox.currentIndexChanged.connect(self.update_podcast_widgets)
+
+            self.day_spinner = QtWidgets.QSpinBox(widget)
+            self.day_spinner.setRange(1, 31)
+            self.day_spinner.setValue(datetime.now().day)
+
         episode = media_objects.get_episode()
         if episode is not None:
             self.season_spinner.setValue(episode.get_season())
-            self.episode_spinner.setValue(episode.get_episode())
             self.name_line_edit.setText(episode.get_name())
             self.runtime_spinner.setValue(episode.get_runtime())
             self.watched_checkbox.setChecked(episode.is_watched())
 
-        grid = [[season_label, self.season_spinner],
-                [episode_label, self.episode_spinner],
-                [name_label, self.name_line_edit],
-                [runtime_label, self.runtime_spinner],
-                [self.watched_checkbox]]
+            if self.show_season is not None:
+                self.episode_spinner.setValue(episode.get_episode())
+            else:
+                self.month_combobox.setCurrentIndex(episode.get_episode() // 1000)
+                self.day_spinner.setValue(episode.get_episode() % 1000)
+
+        if self.show_season is not None:
+            grid = [[season_label, self.season_spinner],
+                    [episode_label, self.episode_spinner],
+                    [name_label, self.name_line_edit],
+                    [runtime_label, self.runtime_spinner],
+                    [self.watched_checkbox]]
+        else:
+            grid = [[season_label, self.season_spinner],
+                    [month_label, self.month_combobox],
+                    [day_label, self.day_spinner],
+                    [name_label, self.name_line_edit],
+                    [runtime_label, self.runtime_spinner],
+                    [self.watched_checkbox]]
 
         if self.show_season is False:
             _ = grid.pop(0)
@@ -113,14 +149,34 @@ class EpisodeDialog(QtWidgets.QDialog):
 
     # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    def update_podcast_widgets(self):
+        """Updates the episode widgets and their values
+        whenever a Podcast episode is being added or edited
+        """
+
+        day_max = [
+            31, 29 if self.season_spinner.value() % 4 == 0 else 28,
+            31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+        ]
+        max_day_value = day_max[self.month_combobox.currentIndex()]
+
+        self.day_spinner.setRange(1, max_day_value)
+        if self.day_spinner.value() > max_day_value:
+            self.day_spinner.setValue(max_day_value)
+
     def clear_widgets(self):
         """Clears the widgets completely in the EpisodeDialog"""
 
         self.season_spinner.setValue(1)
-        self.episode_spinner.setValue(1)
         self.name_line_edit.setText("")
         self.runtime_spinner.setValue(1)
         self.watched_checkbox.setChecked(False)
+
+        if self.show_season is not None:
+            self.episode_spinner.setValue(1)
+        else:
+            self.month_combobox.setCurrentIndex(datetime.now().month)
+            self.day_spinner.setValue(datetime.now().day)
 
     def cancel(self):
         """Cancels creating or editing an Episode"""
@@ -135,9 +191,13 @@ class EpisodeDialog(QtWidgets.QDialog):
         """
 
         try:
+            if self.show_season is not None:
+                episode_value = self.episode_spinner.value()
+            else:
+                episode_value = self.month_combobox.currentIndex() * 1000 + self.day_spinner.value()
             media_objects.set_episode(Episode(
                 self.season_spinner.value() if self.show_season is not False else 1,
-                self.episode_spinner.value(),
+                episode_value,
                 self.name_line_edit.text() or None,
                 self.runtime_spinner.value(),
                 watched=self.watched_checkbox.isChecked()
