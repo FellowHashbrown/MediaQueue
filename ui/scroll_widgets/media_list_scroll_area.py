@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 from media.util import get_type
 from ui import add_grid_to_layout
 from ui import media_objects
+from options import options
 
 
 class MediaListScrollArea(QtWidgets.QScrollArea):
@@ -97,6 +98,10 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
                              person_label, runtime_label,
                              media_button, remove_button]
             self.widgets.append(media_widgets)
+
+        if len(options.get_persons()) == 1:     # This means only the default person exists
+            for row in self.widgets:
+                row.pop(4).hide()
 
         add_grid_to_layout(self.widgets, layout)
         layout.addWidget(self.no_media_label, 1, 0, 1, 6)
