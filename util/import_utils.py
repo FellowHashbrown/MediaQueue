@@ -90,7 +90,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
                 raise KeyError(f"{person} does not exist in your Person list")
             episodes = []
             for episode in media_content[2:]:
-                s_num, e_num, e_name, runtime, watched = episode
+                try:
+                    s_num, e_num, e_name, runtime, watched = episode
+                except ValueError as e:
+                    raise ValueError(f"{e} -> {episode}")
                 episodes.append(Episode(
                     int(s_num), int(e_num),
                     e_name, int(runtime),
@@ -109,7 +112,10 @@ def csv_to_media(file: Union[TextIOWrapper, str]) -> List[Union[Movie, LimitedSe
                 raise KeyError(f"{person} does not exist in your Person list")
             seasons = {}
             for episode in media_content[2:]:
-                s_num, e_num, e_name, runtime, watched = episode
+                try:
+                    s_num, e_num, e_name, runtime, watched = episode
+                except ValueError as e:
+                    raise ValueError(f"{e} -> {episode}")
                 if int(s_num) not in seasons:
                     seasons[int(s_num)] = []
                 seasons[int(s_num)].append(Episode(
