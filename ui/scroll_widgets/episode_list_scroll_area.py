@@ -80,7 +80,7 @@ class EpisodeListScrollArea(QtWidgets.QScrollArea):
             season_label = QtWidgets.QLabel(str(episode.get_season()), self)
             episode_label = QtWidgets.QLabel(str(episode.get_episode())
                                              if self.hide_season is not None
-                                             else str("%s %s" % (months[episode.get_episode() // 1000],
+                                             else str("%s %s" % (months[episode.get_episode() // 1000 - 1],
                                                                  episode.get_episode() % 1000)), self)
             runtime_label = QtWidgets.QLabel("{} min{}".format(
                 episode.get_runtime(),
