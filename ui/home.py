@@ -58,6 +58,7 @@ class Home(QtWidgets.QFrame):
             edit_media_func=self.add_edit_media,
             remove_media_func=self.remove_media
         )
+        self.filter_labels = None
 
         self.filter_start_finish_combobox = None
         self.filter_type_combobox = None
@@ -91,6 +92,8 @@ class Home(QtWidgets.QFrame):
         layout.addWidget(self.setup_sort_ui(self))
         layout.addWidget(self.media_list_widget, 1)
         layout.addWidget(self.setup_new_buttons_ui())
+        self.update_persons_filters()
+        self.update_providers_filters()
 
         self.setLayout(layout)
         self.show()
@@ -136,18 +139,18 @@ class Home(QtWidgets.QFrame):
         self.search_line_edit.setToolTip("Search for specific media in the media queue")
 
         # Create the filter labels
-        filter_labels = [
+        self.filter_labels = [
             QtWidgets.QLabel("Filter By Started/Finished"), None,
             QtWidgets.QLabel("Filter By Type"),
             QtWidgets.QLabel("Filter By Streaming Provider"),
             QtWidgets.QLabel("Filter By Person"),
             self.search_line_edit
         ]
-        for label in filter_labels:
+        for label in self.filter_labels:
             if label is not None:
                 label.setAlignment(QtCore.Qt.AlignHCenter)
 
-        widgets = [filter_labels,
+        widgets = [self.filter_labels,
                    [self.filter_start_finish_combobox, None,
                     self.filter_type_combobox, self.filter_provider_combobox,
                     self.filter_person_combobox, self.clear_filter_button, None, None]]
@@ -547,13 +550,21 @@ class Home(QtWidgets.QFrame):
 
     def update_providers_filters(self):
         """Updates the list of providers in the combobox for providers filters"""
+        self.sort_provider_button.setVisible(len(options.get_providers()) > 2)
+        self.filter_provider_combobox.setVisible(len(options.get_providers()) > 2)
+        self.filter_labels[3].setVisible(len(options.get_providers()) > 2)
         self.filter_provider_combobox.clear()
         self.filter_provider_combobox.addItems(["All"] + [provider for provider in options.get_providers()])
+        self.media_list_widget.scroll_area.update_ui()
 
     def update_persons_filters(self):
         """Updates the list of persons in the combobox for persons filters"""
+        self.sort_person_button.setVisible(len(options.get_persons()) > 1)
+        self.filter_person_combobox.setVisible(len(options.get_persons()) > 1)
+        self.filter_labels[4].setVisible(len(options.get_persons()) > 1)
         self.filter_person_combobox.clear()
         self.filter_person_combobox.addItems(["All"] + [person for person in options.get_persons()])
+        self.media_list_widget.scroll_area.update_ui()
 
 
 if __name__ == "__main__":

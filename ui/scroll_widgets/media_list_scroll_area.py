@@ -57,6 +57,10 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
             widget.setStyleSheet("font-weight: bold;")
             if widget.text() == "Name":
                 widget.setAlignment(QtCore.Qt.AlignHCenter)
+        if len(options.get_persons()) == 1:
+            self.widgets[0].pop(4).hide()
+        if len(options.get_providers()) == 2:
+            self.widgets[0].pop(3).hide()
 
         # Sort the media and create the widgets
         media_objects.sort_media()
@@ -97,11 +101,11 @@ class MediaListScrollArea(QtWidgets.QScrollArea):
                              type_label, provider_label,
                              person_label, runtime_label,
                              media_button, remove_button]
+            if len(options.get_persons()) == 1:
+                media_widgets.pop(4).hide()
+            if len(options.get_providers()) == 2:
+                media_widgets.pop(3).hide()
             self.widgets.append(media_widgets)
-
-        if len(options.get_persons()) == 1:     # This means only the default person exists
-            for row in self.widgets:
-                row.pop(4).hide()
 
         add_grid_to_layout(self.widgets, layout)
         layout.addWidget(self.no_media_label, 1, 0, 1, 6)
